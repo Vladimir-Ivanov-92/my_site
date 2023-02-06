@@ -23,6 +23,7 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     status = models.SmallIntegerField(default=CREATED, choices=STATUSES)
     initiator = models.ForeignKey(User, on_delete=models.CASCADE, null=True, default=None)
+    csrftoken = models.CharField(max_length=256, null=True, default=None)
 
     def __str__(self):
         return f"Order #{self.id} {self.first_name} {self.last_name}"

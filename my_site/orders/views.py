@@ -10,7 +10,7 @@ from products.utils import DataMixin
 class OrderCreateView(DataMixin, CreateView):
     template_name = 'orders/order_create.html'
     form_class = OrderForm
-    success_url = reverse_lazy('products_home')  # FIXMI удалть так как перенаправление есть ниже в функуии
+    success_url = 'products_home'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -24,8 +24,9 @@ class OrderCreateView(DataMixin, CreateView):
             order = Order.objects.get(initiator=self.request.user)
             order.update_after_oder()
         else:
+            form.instance.csrftoken = self.request.COOKIES['csrftoken']
             super().form_valid(form)
             csrftoken = self.request.COOKIES['csrftoken']
-            order = Order.objects.last()  # FIXMI  добавть  в модель поле Csrftoken и сделать выборку заказ по токену
+            order = Order.objects.get(csrftoken=csrftoken)
             order.update_after_oder(csrftoken=csrftoken)
         return HttpResponseRedirect(reverse_lazy('products_home'))
