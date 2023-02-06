@@ -1,0 +1,27 @@
+body {
+    /*background-color: ghostwhite;*/
+}
+
+.navbar-brand{
+    margin-right: 0px;
+}
+
+.nav-link{
+    color: #fff;
+    text-transform: uppercase;
+}
+
+#product-card{
+    color: var(--bs-link-color);
+    text-transform: uppercase;
+}
+main.carousel-item{
+    height: 400px;
+}
+main .carousel-item img{
+    height: 400px;
+}
+
+a.list-group-item {
+    color: #007bff
+}

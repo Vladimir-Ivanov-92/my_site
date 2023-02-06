@@ -1,0 +1,113 @@
+<div class="offcanvas offcanvas-end " tabindex="-1" id="basket" aria-labelledby="offcanvasExampleLabel"
+     data-disableScrolling="false">
+
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Корзина </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <!--  Карточки товаров в корзине-->
+    {% if request.user.is_authenticated %}
+        {#  Для Авторизированного пользователя:#}
+        {% if baskets %}
+            <div class="offcanvas-body">
+                {% for basket in baskets %}
+                    <div class="card border-success mb-3 mx-1 ">
+                        <div class="card-body text-success">
+                            <h5 class="card-title">{{ basket.product.name }}</h5>
+                            <p class="card-text">{{ basket.product.category }}</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-success">
+                            <div class="row text-center">
+                                <div class="col-lg-3">
+                                    <input name="basketID" type="number" class="form-control"
+                                           value="{{ basket.amount }}" min="1">
+                                </div>
+                                <div class="col-lg-5">{{ basket.sum }} руб.</div>
+                                <div class="col-lg-4">
+                                    <a href="{% url 'basket_remove_auth' basket.id %}">Удалить</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <!--  END Карточки товаров в корзине-->
+
+            <!-- Итого -->
+            <div class="card-footer bg-transparent border-success mt-2">
+                <div class="card border-success mb-1 mx-1">
+                    <div class="card-footer bg-transparent">
+                        <div class="row text-center">
+                            <div class="col-lg-4"><h4>Итого:</h4></div>
+                            <div class="col-lg-8"><h4>{{ baskets.total_sum }} руб.</h4></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 mx-1">
+                    <a href="{% url 'order_create' %}" class="btn btn-success mb-5"> Оформить заказ </a>
+                </div>
+            </div>
+            <!-- END Итого -->
+        {% else %}
+            <div class="offcanvas-body">
+                <div>
+                    В вашей корзине еще нет товаров...
+                </div>
+            </div>
+        {% endif %}
+
+    {% else %}
+        {#  Для Не авторизированного пользователя:#}
+        {% if baskets %}
+            <div class="offcanvas-body">
+                {% for basket in baskets %}
+                    <div class="card border-success mb-3 mx-1 ">
+                        <div class="card-body text-success">
+                            <h5 class="card-title">{{ basket.product.name }}</h5>
+                            <p class="card-text">{{ basket.product.category }}</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-success">
+                            <div class="row text-center">
+                                <div class="col-lg-3">
+                                    <input name="basketID" type="number" class="form-control"
+                                           value="{{ basket.amount }}" min="1">
+                                </div>
+                                <div class="col-lg-5">{{ basket.sum }} руб.</div>
+                                <div class="col-lg-4">
+                                    <a href="{% url 'basket_remove' basket.id %}">Удалить</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <!--  END Карточки товаров в корзине-->
+
+            <!-- Итого -->
+            <div class="card-footer bg-transparent border-success mt-2">
+                <div class="card border-success mb-1 mx-1">
+                    <div class="card-footer bg-transparent">
+                        <div class="row text-center">
+                            <div class="col-lg-4"><h4>Итого:</h4></div>
+                            <div class="col-lg-8"><h4>{{ baskets.total_sum }} руб.</h4></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 mx-1">
+                    <a href="{% url 'order_create' %}" class="btn btn-success mb-5"> Оформить заказ </a>
+                </div>
+            </div>
+            <!-- END Итого -->
+        {% else %}
+            <div class="offcanvas-body">
+                <div>
+                    В вашей корзине еще нет товаров...
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+
+</div>
+
+

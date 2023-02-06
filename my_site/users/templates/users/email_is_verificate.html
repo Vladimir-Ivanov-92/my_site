@@ -1,0 +1,15 @@
+{% extends 'products/base.html' %}
+
+{% block main %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Поздравляю!</h5>
+                    <p class="card-text"> Ваша почта успешно подтверждена!</p>
+                    <a href="{% url 'products_home' %}" class="btn btn-primary">Вернуться на сайт</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main %}
