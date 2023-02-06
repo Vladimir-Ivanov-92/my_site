@@ -13,4 +13,5 @@ class OrderAdmin(admin.ModelAdmin):
               'status',
               'initiator',
               ]
+
     readonly_fields = ['id', 'created']

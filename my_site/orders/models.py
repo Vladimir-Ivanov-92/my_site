@@ -5,11 +5,13 @@ from users.models import User
 
 
 class Order(models.Model):
-    CREATED = 0
-    IN_WORK = 1
-    DELIVERED = 2
+    TEMPORARY = 0
+    CREATED = 1
+    IN_WORK = 2
+    DELIVERED = 3
 
     STATUSES = [
+        (TEMPORARY, 'Временный'),
         (CREATED, 'Создан'),
         (IN_WORK, 'В работе'),
         (DELIVERED, 'Доставлен'),
@@ -21,7 +23,7 @@ class Order(models.Model):
     address = models.CharField(max_length=256)
     basket_history = models.JSONField(default=dict)
     created = models.DateTimeField(auto_now_add=True)
-    status = models.SmallIntegerField(default=CREATED, choices=STATUSES)
+    status = models.SmallIntegerField(default=TEMPORARY, choices=STATUSES)
     initiator = models.ForeignKey(User, on_delete=models.CASCADE, null=True, default=None)
     csrftoken = models.CharField(max_length=256, null=True, default=None)
 
@@ -33,7 +35,7 @@ class Order(models.Model):
             baskets = BasketFK.objects.filter(csrftoken=csrftoken)
         else:
             baskets = BasketAuth.objects.filter(user=self.initiator)
-        self.status = self.IN_WORK
+        self.status = self.CREATED
         self.basket_history = {
             'order_items': [basket.de_json() for basket in baskets],
             'total_sum': float(baskets.total_sum()),

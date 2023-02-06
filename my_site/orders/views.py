@@ -1,5 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView
 
 from orders.forms import OrderForm
@@ -21,7 +22,7 @@ class OrderCreateView(DataMixin, CreateView):
         if self.request.user.is_authenticated:
             form.instance.initiator = self.request.user
             super().form_valid(form)
-            order = Order.objects.get(initiator=self.request.user)
+            order = Order.objects.get(initiator=self.request.user, status=0)
             order.update_after_oder()
         else:
             form.instance.csrftoken = self.request.COOKIES['csrftoken']
@@ -30,3 +31,28 @@ class OrderCreateView(DataMixin, CreateView):
             order = Order.objects.get(csrftoken=csrftoken)
             order.update_after_oder(csrftoken=csrftoken)
         return HttpResponseRedirect(reverse_lazy('products_home'))
+
+
+class OrdersListView(DataMixin, ListView):
+    template_name = 'orders/orders.html'
+    queryset = Order.objects.all()
+    ordering = ('created')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context_def = self.get_user_context(title="Заказы")
+        return dict(list(context.items()) + list(context_def.items()))
+
+    def get_queryset(self):
+        queryset = super(OrdersListView, self).get_queryset()
+        return queryset.filter(initiator=self.request.user)
+
+
+class OrderDetailView(DataMixin, DetailView):
+    template_name = 'orders/order.html'
+    model = Order
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context_def = self.get_user_context(title=f"Заказ {self.object.id}")
+        return dict(list(context.items()) + list(context_def.items()))

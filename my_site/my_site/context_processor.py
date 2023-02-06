@@ -43,7 +43,7 @@ menu_user_dropdown = [
     },
     {
         "title": "Заказы",
-        "url_name": "profile"
+        "url_name": "orders_list"
     },
     {
         "title": "Админ панель",
@@ -58,7 +58,10 @@ def get_context_data(request):
     if user.is_authenticated:
         baskets = BasketAuth.objects.filter(user=request.user)
     else:
-        baskets = BasketFK.objects.filter(csrftoken=request.COOKIES['csrftoken'])
+        try:
+            baskets = BasketFK.objects.filter(csrftoken=request.COOKIES['csrftoken'])
+        except KeyError:
+            baskets = None
 
     update_menu = menu.copy()
     update_contacts_dropdown = contacts_dropdown.copy()
