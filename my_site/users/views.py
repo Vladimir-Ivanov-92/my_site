@@ -1,10 +1,11 @@
-from baskets.views import basket_auth
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView
+
+from baskets.views import basket_auth
 from users.forms import UserRegistrationForm
 from users.models import EmailVerification, User
 

@@ -1,4 +1,5 @@
 from django.urls import path
+
 from products.views import (CatalogView, CategoryView, HomeView, ProductView,
                             delivery_and_pay_page, feedback_page)
 

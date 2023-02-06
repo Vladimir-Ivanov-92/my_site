@@ -1,5 +1,6 @@
-from baskets.models import BasketAuth, BasketFK
 from django.contrib import admin
+
+from baskets.models import BasketAuth, BasketFK
 
 # Register your models here.
 

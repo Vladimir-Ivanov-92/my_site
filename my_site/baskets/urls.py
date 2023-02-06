@@ -1,6 +1,7 @@
+from django.urls import path
+
 from baskets.views import (basket_add, basket_add_auth, basket_remove,
                            basket_remove_auth)
-from django.urls import path
 
 urlpatterns = [
     path('basket/add/<slug:product_slug>/', basket_add, name="basket_add"),

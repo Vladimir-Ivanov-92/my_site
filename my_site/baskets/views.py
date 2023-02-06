@@ -1,5 +1,6 @@
-from baskets.models import BasketAuth, BasketFK
 from django.http import HttpResponseRedirect
+
+from baskets.models import BasketAuth, BasketFK
 from products.models import Product
 
 

@@ -2,6 +2,7 @@ from django.core.cache import cache
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView
+
 from products.models import Category, Product
 from products.utils import DataMixin
 
