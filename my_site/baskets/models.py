@@ -1,4 +1,5 @@
 from django.db import models
+
 from products.models import Product
 from users.models import User
 
@@ -25,6 +26,15 @@ class BasketFK(models.Model):
     def sum(self):
         return self.product.price * self.amount
 
+    def de_json(self):
+        basket_item = {
+            'product_name': self.product.name,
+            'amount': self.amount,
+            'price': float(self.product.price),
+            'sum': float(self.sum()),
+        }
+        return basket_item
+
     class Meta:
         verbose_name = "КорзинаFK"
         verbose_name_plural = "КорзинаFK"
@@ -44,6 +54,15 @@ class BasketAuth(models.Model):
 
     def sum(self):
         return self.product.price * self.amount
+
+    def de_json(self):
+        basket_item = {
+            'product_name': self.product.name,
+            'amount': self.amount,
+            'price': float(self.product.price),
+            'sum': float(self.sum()),
+        }
+        return basket_item
 
     class Meta:
         verbose_name = "КорзинаAuth"

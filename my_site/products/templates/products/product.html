@@ -3,91 +3,89 @@
 
 
 {% block breadcrumb %}
-<div class="container">
-    <div class="row">
-        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" >
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Product</li>
-          </ol>
-        </nav>
+    <div class="container">
+        <div class="row">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Product</li>
+                </ol>
+            </nav>
 
+        </div>
     </div>
-</div>
 
 {% endblock breadcrumb %}
 
 
 {% block main %}
 
-<div class="container">
-<!--    <div class="row mb-1">-->
+    <div class="container">
+        <!--    <div class="row mb-1">-->
         <div class="card text-bg-light mb-3">
-<!--Header-->
-          <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="true" href="#">Active</a>
-              </li>
-              <li class="nav-item">
-                <a id="product-card"  class="nav-link" href="#">Link</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled">Disabled</a>
-              </li>
-            </ul>
-          </div>
-<!--End Header-->
-<!--Body-->
-          <div class="card-body">
-            <h4 class="card-title">{{product.name}}</h4>
-            <p class="card-text">
-              {{product.category}}
-              <div class="container">
-                <div class="row">
-                  <div class="col-lg-6 text-center">
-                    {% if product.image %}
-                      <img src="{{product.image.url}}" class=""  alt="...">
-                    {% endif %}
-                    <div>
-                      <a data-fancybox="" data-caption="Фейерверк Тик-так" href="https://video.rufire.ru/9461.mp4" class="cart-product-body-left-description-top-video__link cart-link_hover"><i>HD</i>-Видео</a>
+            <!--Header-->
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="true" href="#">Active</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="product-card" class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled">Disabled</a>
+                    </li>
+                </ul>
+            </div>
+            <!--End Header-->
+            <!--Body-->
+            <div class="card-body">
+                <h4 class="card-title">{{ product.name }}</h4>
+                <p class="card-text">
+                    {{ product.category }}
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6 text-center">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" class="" alt="...">
+                            {% endif %}
+                            <div>
+                                <a data-fancybox="" data-caption="Фейерверк Тик-так"
+                                   href="https://video.rufire.ru/9461.mp4"
+                                   class="cart-product-body-left-description-top-video__link cart-link_hover"><i>HD</i>-Видео</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <h5>Описание:</h5>
+                            <ul style="list-style:none">
+                                <li>
+                                    <p class="mb-0">{{ product.description }}</p>
+                                </li>
+                            </ul>
+                            <h5>Характеристики:</h5>
+                            <ul style="list-style:none">
+                                <li>
+                                    <p class="mb-0"> Высота выстрела: {{ product.characteristic.shot_height }} м.</p>
+                                </li>
+                                <li>
+                                    <p class="mb-0"> Время работы: {{ product.characteristic.time_work }} сек.</p>
+                                </li>
+                                <li>
+                                    <p class="mb-0"> Количество зарядов: {{ product.characteristic.number_of_charges }}
+                                        шт.</p>
+                                </li>
+                                <li>
+                                    <p class="mb-0"> Калибр: {{ product.characteristic.caliber }} мм.</p>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                  </div>
-                  <div class="col-lg-6">
-                    <h5>Описание:</h5>
-                      <ul style="list-style:none">
-                        <li>
-                          <p class="mb-0">{{product.description}}</p>
-                        </li>
-                      </ul>
-                    <h5>Характеристики:</h5>
-                      <ul style="list-style:none">
-                          <li>
-                            <p class="mb-0"> Высота выстрела: {{product.characteristic.shot_height}} м.</p>
-                          </li>
-                          <li>
-                            <p class="mb-0"> Время работы: {{product.characteristic.time_work}} сек.</p>
-                          </li>
-                          <li>
-                            <p class="mb-0"> Количество зарядов: {{product.characteristic.number_of_charges}} шт.</p>
-                          </li>
-                          <li>
-                            <p class="mb-0"> Калибр: {{product.characteristic.caliber}} мм.</p>
-                          </li>
-                      </ul>
-                  </div>
                 </div>
-              </div>
-            </p>
-              <form action="{% url "cart_add" product.id %}" method="POST">
-                  {{ cart_product_form }}
-                  {% csrf_token %}
-                  <input type="submit" value="Add to cart">
-              </form>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-<!--End Body-->
+                </p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+            <!--End Body-->
         </div>
-<!--    </div>-->
-</div>
+        <!--    </div>-->
+    </div>
 {% endblock main %}
