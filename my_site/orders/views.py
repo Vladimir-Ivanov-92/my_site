@@ -22,15 +22,17 @@ class OrderCreateView(DataMixin, CreateView):
     def form_valid(self, form):
         if self.request.user.is_authenticated:
             form.instance.initiator = self.request.user
+            form.instance.phone_number = form.cleaned_data['phone_number']
             super().form_valid(form)
             order = Order.objects.get(initiator=self.request.user, status=0)
             order.update_after_oder()
             order.send_order_mail()
         else:
             form.instance.csrftoken = self.request.COOKIES['csrftoken']
+            form.instance.phone_number = form.cleaned_data['phone_number']
             super().form_valid(form)
             csrftoken = self.request.COOKIES['csrftoken']
-            order = Order.objects.get(csrftoken=csrftoken)
+            order = Order.objects.get(csrftoken=csrftoken, status=0)
             order.update_after_oder(csrftoken=csrftoken)
             order.send_order_mail()
         return HttpResponseRedirect(reverse_lazy('order_is_create', args=[order.pk]))

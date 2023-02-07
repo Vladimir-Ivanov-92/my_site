@@ -4,10 +4,13 @@ from django.core.mail import send_mail
 from django.db import models
 from django.urls import reverse
 from django.utils.timezone import now
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class User(AbstractUser):
     is_verified_email = models.BooleanField(default=False)
+    phone_number = PhoneNumberField(unique=True, null=True, blank=True,
+                                    default=None)
 
 
 class EmailVerification(models.Model):

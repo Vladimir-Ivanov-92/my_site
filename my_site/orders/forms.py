@@ -1,4 +1,6 @@
 from django import forms
+from phonenumber_field.formfields import PhoneNumberField
+from phonenumber_field.widgets import RegionalPhoneNumberWidget
 
 from orders.models import Order
 
@@ -17,13 +19,22 @@ class OrderForm(forms.ModelForm):
         }
     ))
     email = forms.EmailField(label="Адрес электронной почты", widget=forms.EmailInput(
-        {'class': 'form-control',
-         'placeholder': 'vasya@example.ru'
+        attrs={
+            'class': 'form-control',
+            'placeholder': 'vasya@example.ru'
          }
     ))
+    phone_number = PhoneNumberField(label="Номер телефона", widget=RegionalPhoneNumberWidget(
+        region='RU',
+        attrs={
+            'class': 'form-control',
+            'placeholder': '+7(999)999-99-99',
+        }
+    ))
     address = forms.CharField(label="Адрес доставки", widget=forms.TextInput(
-        {'class': 'form-control',
-         'placeholder': 'г. Мурманск, ул. Ленина д.1'
+        attrs={
+            'class': 'form-control',
+            'placeholder': 'г. Мурманск, ул. Ленина д.1'
          }
     ))
 

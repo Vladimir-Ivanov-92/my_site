@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.db import models
 from django.urls import reverse
+from phonenumber_field.modelfields import PhoneNumberField
 
 from baskets.models import BasketAuth, BasketFK
 from users.models import User
@@ -25,6 +26,7 @@ class Order(models.Model):
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
     email = models.EmailField(max_length=256)
+    phone_number = PhoneNumberField(null=True, default=None)
     address = models.CharField(max_length=256)
     basket_history = models.JSONField(default=dict)
     created = models.DateTimeField(auto_now_add=True)
@@ -43,6 +45,7 @@ class Order(models.Model):
             f"Покупатель:\n"
             f"Имя: {self.first_name} \n"
             f"Фамилия: {self.last_name} \n"
+            f"Телефон: {self.phone_number.as_international} \n"
             f"Электронная почта: {self.email} \n"
             f"Адрес доставки: {self.address} \n \n"
             f"Заказ №{self.id}:\n"

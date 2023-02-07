@@ -8,6 +8,14 @@
         <div class="container pt-5">
             <div class="text-center mt-5">
                 <h1>Создан заказ №{{ object.id }}</h1>
+                <div class="d-flex flex-column" style="align-items: flex-start;">
+                    <p class="mb-2"><b>Статус:</b>  {{ object.get_status_display }}</p>
+                    <p class="mb-0"><b>Имя:</b>  {{ object.first_name }}</p>
+                    <p class="mb-0"><b>Фамилия:</b> {{ object.last_name }}</p>
+                    <p class="mb-0"><b>Телефон:</b> {{ object.phone_number.as_international }}</p>
+                    <p class="mb-0"><b>Email:</b> {{object.email}}</p>
+                    <p class="mb-0"><b>Адрес доставки:</b> {{ object.address }}</p>
+                </div>
                 <div class="orders mt-5">
                     <table class="table">
                         <thead>
