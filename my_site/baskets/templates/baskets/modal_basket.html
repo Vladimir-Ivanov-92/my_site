@@ -1,3 +1,4 @@
+{% load catalog_tags %}
 <div class="offcanvas offcanvas-end " tabindex="-1" id="basket" aria-labelledby="offcanvasExampleLabel"
      data-disableScrolling="false">
 
@@ -20,13 +21,19 @@
                         </div>
                         <div class="card-footer bg-transparent border-success">
                             <div class="row text-center">
-                                <div class="col-lg-3">
-                                    <input name="basketID" type="number" class="form-control"
-                                           value="{{ basket.amount }}" min="1">
+                                <div class="col-lg-5 p-0">
+{#                                    <input name="basketID" type="number" class="form-control"#}
+{#                                           value="{{ basket.amount }}" min="1">#}
+                                    <a href="{% url 'basket_minus_auth' basket.product.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
+                                        id="{{ basket.product.pk }}">-</a>
+                                    <a href="#" class="btn btn-success disabled">{%  get_BasketAuth_product_amount request=request pk=basket.product.pk %}</a>
+                                    <a href="{% url 'basket_add_auth' basket.product.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
+                                        id="{{ basket.product.pk }}">+</a>
                                 </div>
-                                <div class="col-lg-5">{{ basket.sum }} руб.</div>
-                                <div class="col-lg-4">
-                                    <a href="{% url 'basket_remove_auth' basket.id %}" class="remove" >Удалить</a>
+                                <div class="col-lg-4 p-0">{{ basket.sum }} руб.</div>
+                                <div class="col-lg-3 p-0">
+                                    <a href="{% url 'basket_remove_auth' basket.id %}" class="remove"
+                                       id="{{ basket.product_id }}">Удалить</a>
                                 </div>
                             </div>
                         </div>
@@ -77,13 +84,19 @@
                         </div>
                         <div class="card-footer bg-transparent border-success">
                             <div class="row text-center">
-                                <div class="col-lg-3">
-                                    <input name="basketID" type="number" class="form-control"
-                                           value="{{ basket.amount }}" min="1">
+                                <div class="col-lg-5 p-0">
+{#                                    <input name="basketID" type="number" class="form-control"#}
+{#                                           value="{{ basket.amount }}" min="1">#}
+                                    <a href="{% url 'basket_minus' basket.product.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
+                                        id="{{ basket.product.pk }}">-</a>
+                                    <a href="#" class="btn btn-success disabled">{%  get_BasketFk_product_amount request=request pk=basket.product.pk %}</a>
+                                    <a href="{% url 'basket_add' basket.product.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
+                                        id="{{ basket.product.pk }}">+</a>
                                 </div>
-                                <div class="col-lg-5">{{ basket.sum }} руб.</div>
-                                <div class="col-lg-4">
-                                    <a href="{% url 'basket_remove' basket.id %}" class="remove" >Удалить</a>
+                                <div class="col-lg-4 p-0">{{ basket.sum }} руб.</div>
+                                <div class="col-lg-3 p-0">
+                                    <a href="{% url 'basket_remove' basket.id %}" class="remove"
+                                       id="{{ basket.product_id }}" >Удалить</a>
                                 </div>
                             </div>
                         </div>

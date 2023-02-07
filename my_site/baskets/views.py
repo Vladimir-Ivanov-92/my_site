@@ -1,5 +1,4 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 
 from baskets.models import BasketAuth, BasketFK
 from products.models import Product
@@ -19,10 +18,25 @@ def basket_add(request, product_slug):
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
+def basket_minus(request, product_slug):
+    product = Product.objects.get(slug=product_slug)
+    basket = BasketFK.objects.filter(csrftoken=request.COOKIES['csrftoken'], product=product)
+
+    basket = basket.first()
+    basket.amount -= 1
+    if basket.amount == 0:
+        basket.delete()
+    else:
+        basket.save()
+
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
 def basket_remove(request, basket_id):
     basket = BasketFK.objects.get(id=basket_id)
     basket.delete()
-    return render(request, "baskets/modal_basket.html")
+    # return render(request, "baskets/modal_basket.html")
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 def basket_auth(request):
@@ -54,8 +68,23 @@ def basket_add_auth(request, product_slug):
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
+def basket_minus_auth(request, product_slug):
+    product = Product.objects.get(slug=product_slug)
+    basket = BasketAuth.objects.filter(user=request.user, product=product)
+
+    basket = basket.first()
+    basket.amount -= 1
+    if basket.amount == 0:
+        basket.delete()
+    else:
+        basket.save()
+
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
 def basket_remove_auth(request, basket_id):
     basket = BasketAuth.objects.get(id=basket_id)
     basket.delete()
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])  # тут в response  передается весь html и базовый и
-    # модальные окна в т.ч.
+    # return render(request, "baskets/modal_basket.html") # тут в response  передается только modal_basket.html
+    return HttpResponseRedirect(
+        request.META['HTTP_REFERER'])  # тут в response  передается весь html и базовый и модальные окна в т.ч.

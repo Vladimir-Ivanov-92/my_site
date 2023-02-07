@@ -41,7 +41,7 @@
             {#Форма ввода данных к заказу#}
             <div class="col-md-7 col-lg-8">
                 <h4 class="mb-3">Адрес доставки</h4>
-                <form action="{% url 'order_create' %}" method="post">
+                 <form action="{% url 'order_create' %}" method="post">
                     {% csrf_token %}
                     <div class="row g-3">
                         <div class="col-sm-6">
@@ -78,7 +78,7 @@
                             <strong> {{ baskets.total_sum|intcomma}} руб.</strong>
                         </li>
                     </div>
-                    <buton class="w-100 btn btn-primary btn-lg mt-3" type="submit">Оформить заказ</buton>
+                    <button class="w-100 btn btn-primary btn-lg mt-3" type="submit" >Оформить заказ</button>
                 </form>
             </div>
         </div>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 {% load static %}
+{% load catalog_tags %}
 
 <html lang="en">
 <head>
@@ -18,8 +19,8 @@
 <header id="header">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'products_home' %}">
-                <img src="{% static 'products/images/main.ico' %}" alt="Bootstrap" width="170" height="40">
+            <a class="navbar-brand" href="{% url 'products_home'%}">
+                <img src="{%static 'products/images/main.ico'%}" alt="Bootstrap" width="170" height="40">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent"
                     aria-controls="navContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,67 +29,66 @@
             <div class="collapse navbar-collapse" id="navContent">
                 <ul class="navbar-nav me-auto mb-3 mb-lg-0">
                     {% for m in menu %}
-                        <li class="nav-item">
-                            <a href="{% url m.url_name %}" class="nav-link">{{ m.title }}</a>
-                        </li>
+                    <li class="nav-item">
+                        <a href="{% url m.url_name %}" class="nav-link">{{m.title}}</a>
+                    </li>
                     {% endfor %}
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" id="navDrop" role="button"
                            data-bs-toggle="dropdown"
-                           aria-expanded="false">{{ contacts.title }}</a>
+                           aria-expanded="false">{{contacts.title}}</a>
                         <ul class="dropdown-menu" aria-labelledby="navDrop">
                             {% for c_d in contacts_dropdown %}
-                                <li><a href="#" class="dropdown-item">{{ c_d.title }}</a></li>
+                            <li><a href="#" class="dropdown-item">{{c_d.title}}</a></li>
                             {% endfor %}
                         </ul>
                     </li>
                 </ul>
 
                 {% block login %}
-                    <!-- Button trigger modal -->
-                    <div class="d-flex">
-                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="offcanvas"
-                                data-bs-target="#basket" aria-controls="offcanvasExample">Корзина
+                <!-- Button trigger modal -->
+                <div class="d-flex" id="basket_button_div">
+                    <div class="d-flex" id="basket_button">
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="offcanvas"
+                            data-bs-target="#basket" aria-controls="offcanvasExample">Корзина
+                        {% if baskets %}
+                        <span class="badge text-bg-secondary"> {{baskets.total_amount}} </span>
+                        {% endif %}
+                    </button>
+
+                    {% if not request.user.is_authenticated %}
+                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                                data-bs-target="#login_ajax">Войти
                         </button>
+                        <button type="button" class="btn btn-outline-secondary ms-2" data-bs-toggle="modal"
+                                data-bs-target="#user_registration_ajax">Регистрация
+                        </button>
+                    {% endif %}
 
-                        {% if not request.user.is_authenticated %}
-                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
-                                    data-bs-target="#login_ajax">Войти
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary ms-2" data-bs-toggle="modal"
-                                    data-bs-target="#user_registration_ajax">Регистрация
-                            </button>
-                        {% endif %}
-
-                        {% if request.user.is_authenticated %}
-                            <ul class="navbar-nav me-auto mb-3 mb-lg-0">
-                                <li class="nav-item ">
-                                    <a class="nav-link active text-white" aria-current="page">{{ user.username }}</a>
-                                </li>
-                            </ul>
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle ms-2" type="button"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                    {{ menu_user.title }}
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start ">
-                                    {% for m_u_d in menu_user_dropdown %}
-                                        <li><a class="dropdown-item"
-                                               href="{% url m_u_d.url_name %}">{{ m_u_d.title }}</a></li>
-                                    {% endfor %}
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item"
-                                           href="{% url menu_user.url_logout %}">{{ menu_user.logout }}</a></li>
-                                </ul>
-                            </div>
-                        {% endif %}
+                    {% if request.user.is_authenticated %}
+                    <ul class="navbar-nav me-auto mb-3 mb-lg-0">
+                        <li class="nav-item ">
+                            <a class="nav-link active text-white" aria-current="page">{{user.username}}</a>
+                        </li>
+                    </ul>
+                    <div class="btn-group">
+                      <button class="btn btn-secondary dropdown-toggle ms-2" type="button" data-bs-toggle="dropdown"
+                              aria-expanded="false">
+                          {{menu_user.title}}
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+                        {% for m_u_d in menu_user_dropdown%}
+                            <li><a class="dropdown-item" href="{% url m_u_d.url_name%}">{{m_u_d.title}}</a></li>
+                        {% endfor %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url menu_user.url_logout %}">{{menu_user.logout}}</a></li>
+                      </ul>
                     </div>
-                    <!-- End Button trigger modal -->
+                    {% endif %}
+                </div>
+                <!-- End Button trigger modal -->
                 {% endblock login %}
-
+                </div>
             </div>
         </div>
     </nav>
@@ -120,8 +120,7 @@
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
         crossorigin="anonymous"></script>
 
-<script src="https://code.jquery.com/jquery-3.6.1.min.js"
-        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
         crossorigin="anonymous"></script>
 <script src="{% static 'users/js/form_login.js' %}"></script>
 <script src="{% static 'users/js/form_registration.js' %}"></script>

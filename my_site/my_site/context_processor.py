@@ -57,14 +57,15 @@ def get_context_data(request):
     user = request.user
     if user.is_authenticated:
         baskets = BasketAuth.objects.filter(user=request.user)
+        baskets_product_id = BasketAuth.objects.filter(user=request.user).values_list('product_id', flat=True)
     else:
         try:
             baskets = BasketFK.objects.filter(csrftoken=request.COOKIES['csrftoken'])
+            baskets_product_id = BasketFK.objects.filter(csrftoken=request.COOKIES['csrftoken']).values_list(
+                'product_id', flat=True)
         except KeyError:
             baskets = None
-
-    # cart = Cart(request)
-    # cart_product_form = CartAddProductForm()  #FIXMI!!!!!
+            baskets_product_id = None
 
     update_menu = menu.copy()
     update_contacts_dropdown = contacts_dropdown.copy()
@@ -79,8 +80,7 @@ def get_context_data(request):
         "contacts_dropdown": update_contacts_dropdown,
         "menu_user": menu_user,
         "menu_user_dropdown": update_menu_user_dropdown,
-        # "cart": cart,
-        # "cart_product_form":cart_product_form  #FIXMI!!!!!!
+        "baskets_product_id": baskets_product_id,
     }
 
     return context
