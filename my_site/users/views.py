@@ -14,7 +14,13 @@ class UserRegistrationAjaxView(View):
 
     def post(self, request):
         form = UserRegistrationForm(data=request.POST)
-        if form.is_valid():
+        email = request.POST.get('email')
+        if User.objects.filter(email=email).exists():
+            return JsonResponse(
+                data={'error': "Пользователь с указанным адресом эл. почты уже существует!"},
+                status=400
+            )
+        elif form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
@@ -27,11 +33,11 @@ class UserRegistrationAjaxView(View):
                 data={'error': form.errors.get(i) for i in form.errors},
                 status=400
             )
-        return JsonResponse(
-            data={'error': form.errors.get(i) for i in form.errors},
-            # data={'error': form.errors}
-            status=400
-        )
+        else:
+            return JsonResponse(
+                data={'error': form.errors.get(i) for i in form.errors},
+                status=400
+            )
 
 
 class loginAjaxView(View):
@@ -77,6 +83,7 @@ class EmailVerificationView(TemplateView):
         if email_verification.exists() and not email_verification.first().is_expired():
             user.is_verified_email = True
             user.save()
+            email_verification.delete()
             return super(EmailVerificationView, self).get(request, *args, **kwargs)
         else:
             return HttpResponseRedirect(reverse_lazy('products_home'))
