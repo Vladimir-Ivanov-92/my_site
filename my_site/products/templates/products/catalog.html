@@ -6,6 +6,21 @@
 {% block main %}
 
 <div class="container">
+    <!--icon cards/table-->
+
+    <div class="row mt-2">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-9">
+                <a href="{% url 'products_catalog' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="fa-solid fa-table-cells-large fa-lg p-2"></i>
+                </a>
+                <a href="{% url 'table_view' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="fa-solid fa-bars fa-lg p-2"></i>
+                </a>
+        </div>
+    </div>
+    <!--End icon cards/table-->
+
     <div class="row">
         <div class="col-lg-3">
             <!--        Filter categories-->
@@ -29,6 +44,7 @@
         </div>
 
         <div class="col-lg-9">
+            {% if view_cards %}
             <!--Cards-->
             <div class="row row-cols-1 row-cols-md-3 g-4 mt-0 mb-4">
 {#            {% cache 30 products %}#}
@@ -80,6 +96,61 @@
 {#            {% endcache %}#}
             </div>
             <!--End Cards-->
+            {% else %}
+            <!--Table-->
+            <div class="row row-cols-1 row-cols-md-3 g-4 mt-0 mb-4">
+                <table class="table" style="margin-top: 14px">
+                    <thead>
+                    <tr>
+                        <th scope="col">Артикль</th>
+                        <th scope="col">Название</th>
+                        <th scope="col"></th>
+                        <th scope="col">Цена</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for p in products %}
+                    <tr>
+                        <td>{{ p.article }}</td>
+                        <td>{{ p.name }}</td>
+                        <td><img src="{{p.image.url}}" style="width: 50px; height: 50px"  alt="..."></td>
+                        <td>{{ p.price }}.</td>
+                        <td id="cardfooter{{ p.pk }}" style="width: 200px">
+                            <div id="cardfooterdiv{{ p.pk }}">
+                                {% if request.user.is_authenticated %}
+                                    {% if p.pk in baskets_product_id %}
+                                      <a href="{% url 'basket_minus_auth' p.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
+                                         id="{{ p.pk }}">-</a>
+                                      <a href="#" class="btn btn-success disabled">{%  get_BasketAuth_product_amount request=request pk=p.pk %}</a>
+                                      <a href="{% url 'basket_add_auth' p.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
+                                         id="{{ p.pk }}">+</a>
+                                    {% else %}
+                                      <a href="{% url 'basket_add_auth' p.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
+                                         id="{{ p.pk }}">В корзину</a> {# В js используется id (№) для идентификации объекта из списка #}
+                                    {% endif %}
+                                {% else %}
+                                    {% if p.pk in baskets_product_id %}
+                                      <a href="{% url 'basket_minus' p.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
+                                         id="{{ p.pk }}">-</a>
+                                      <a href="#" class="btn btn-success disabled">{%  get_BasketFk_product_amount request=request pk=p.pk %}</a>
+                                      <a href="{% url 'basket_add' p.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
+                                         id="{{ p.pk }}">+</a>
+                                    {% else %}
+                                      <a href="{% url 'basket_add' p.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
+                                         id="{{ p.pk }}">В корзину</a> {# В js используется id (№) для идентификации объекта из списка #}
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!--End Table-->
+            {% endif %}
+
             <!--Пагинация-->
             {% if page_obj.has_other_pages %}
                 <nav aria-label="Page navigation example">
