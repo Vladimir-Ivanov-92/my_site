@@ -42,7 +42,7 @@ class Order(models.Model):
         subject = f"Создан заказ №{self.id}"
         link = reverse('orders_for_staff')
         orders_for_staff_link = f"{settings.DOMAIN_NAME}{link}"
-        message = (
+        message_for_staff_on_email = (
             f"Покупатель:\n"
             f"Имя: {self.first_name} \n"
             f"Фамилия: {self.last_name} \n"
@@ -55,21 +55,73 @@ class Order(models.Model):
             f"#Товары в заказе: \n"
         )
 
+        message_for_staff_on_telegram = (
+            f"Покупатель:\n"
+            f"Имя: {self.first_name} \n"
+            f"Фамилия: {self.last_name} \n"
+            f"Телефон: {self.phone_number} \n"
+            f"Электронная почта: {self.email} \n"
+            f"Адрес доставки: {self.address} \n \n"
+            f"Заказ №{self.id}:\n"
+            f"Общая сумма заказа: {self.basket_history['total_sum']}руб. \n"
+            f"Перейти на страницу заказов: {orders_for_staff_link} \n\n"
+            f"#Товары в заказе: \n"
+        )
+
+        message_for_user_on_email = (
+            f"Спасибо за оформленный заказ на сайте {settings.DOMAIN_NAME} \n"
+            f"В ближайшее время мы свяжемся с Вами для уточнения данных по заказу и согласования времени доставки.\n\n"
+            f"Данные вашего заказа:\n"
+            f"Имя: {self.first_name} \n"
+            f"Фамилия: {self.last_name} \n"
+            f"Телефон: {self.phone_number} \n"
+            f"Электронная почта: {self.email} \n"
+            f"Адрес доставки: {self.address} \n \n"
+            f"Заказ №{self.id}:\n"
+            f"Общая сумма заказа: {self.basket_history['total_sum']}руб. \n"
+            f"#Товары в заказе: \n"
+        )
+
         for i in range(self.basket_history['order_items'].__len__()):
-            message += (
+            message_for_staff_on_email += (
                 f"#{i + 1} "
                 f"{self.basket_history['order_items'][i]['product_name']}| "
                 f"Количество: {self.basket_history['order_items'][i]['amount']}шт.| "
                 f"Цена за шт: {self.basket_history['order_items'][i]['price']}руб.| "
-                f"Всего: {self.basket_history['order_items'][i]['sum']}руб. \n"
+                f"Всего: {self.basket_history['order_items'][i]['sum']}руб. \n\n"
             )
 
-        send_message_about_order_in_telegram(message)
+            message_for_staff_on_telegram += (
+                f"#{i + 1} "
+                f"{self.basket_history['order_items'][i]['product_name']}| "
+                f"Количество: {self.basket_history['order_items'][i]['amount']}шт.| "
+                f"Цена за шт: {self.basket_history['order_items'][i]['price']}руб.| "
+                f"Всего: {self.basket_history['order_items'][i]['sum']}руб. \n\n"
+            )
+
+            message_for_user_on_email += (
+                f"#{i + 1} "
+                f"{self.basket_history['order_items'][i]['product_name']}| "
+                f"Количество: {self.basket_history['order_items'][i]['amount']}шт.| "
+                f"Цена за шт: {self.basket_history['order_items'][i]['price']}руб.| "
+                f"Всего: {self.basket_history['order_items'][i]['sum']}руб. \n\n"
+            )
+
+        send_message_about_order_in_telegram(message_for_staff_on_telegram)
+        # send mail for staff about order:
         send_mail(
             subject=subject,
-            message=message,
+            message=message_for_staff_on_email,
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=['....@.....ru'],  # FIXMI!!! Исправить на [self.email] !!!
+            recipient_list=[settings.EMAIL_STAFF],
+            fail_silently=False,
+        )
+        # send mail for user about order:
+        send_mail(
+            subject=subject,
+            message=message_for_user_on_email,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[self.email],
             fail_silently=False,
         )
 

@@ -1,3 +1,5 @@
+# !/usr/bin/python
+
 import telebot
 
 from my_site import settings
