@@ -26,10 +26,28 @@
                                 <td>{{ order.created }}</td>
                                 <td>{{ order.basket_history.total_sum|intcomma }} руб.</td>
                                 <td>
-                                    <a href="{% url 'order_detail' order.id %}">просмотреть</a>
+                                    <a href="{% url 'order_detail' order.id %}" style="color:slategrey"><i class="fa-regular fa-eye"></i></a>
                                 </td>
                             </tr>
                         {% endfor %}
+                        {#                    <tr class="table-success">#}
+                        {#                        <th scope="row">2</th>#}
+                        {#                        <td>Досталвен</td>#}
+                        {#                        <td>16 июля 21 года</td>#}
+                        {#                        <td>4 876 руб.</td>#}
+                        {#                        <td>#}
+                        {#                            <a href="order.html">просмотреть</a>#}
+                        {#                        </td>#}
+                        {#                    </tr>#}
+                        {#                    <tr class="table-info">#}
+                        {#                        <th scope="row">3</th>#}
+                        {#                        <td>В пути</td>#}
+                        {#                        <td>14 нояб. 21 года</td>#}
+                        {#                        <td>9 566 руб.</td>#}
+                        {#                        <td>#}
+                        {#                            <a href="order.html">просмотреть</a>#}
+                        {#                        </td>#}
+                        {#                    </tr>#}
                         </tbody>
                     </table>
                 </div>

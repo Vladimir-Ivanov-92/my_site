@@ -2,42 +2,56 @@
 {% load static %}
 
 {% block main %}
-<!--Сarousel-->
-{#<div class="container"> #}
-    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="{% static 'products/images/1.jpg' %}" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="{% static 'products/images/2.jpg' %}" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="{% static 'products/images/3.jpg' %}" class="d-block w-100" alt="...">
+    <div style="background-color: black;">
+        <div class="container">
+            <div class="Contact-banner">
+                <div class="d-flex" style="justify-content: center">
+                    <img src="{%static 'products/images/salut-big.gif'%}">
+                    <p class="Contact-top-left">ФЕЙЕРВЕРКИ В МУРМАНСКЕ</p>
+                    <p class="Contact-top-right">Доставка  в течение 12 часов</p>
+                    <p class="Contact-top-right1">СРОЧНАЯ ДОСТАВКА ОТ ОДНОГО ЧАСА</p>
+                </div>
             </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
-                data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
-                data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-{#</div>#}
-    <!--End Сarousel-->
 
-<!--Lorem-->
-    <div class="text-center">
-    <h1>Сайт является демонстрационным! <br>
-        Продажа товаров не осуществляется! <br>
-        Цены не действительны, заказ товаров невозможен!
-    </h1>
+        <!--Lorem-->
+        <div class="text-center text-white">
+        <h1 style="font-size: calc(15px + 2vw)">Сайт является демонстрационным! <br>
+            Продажа товаров не осуществляется! <br>
+            Цены не действительны, заказ товаров невозможен!
+        </h1>
+        </div>
+        <!--End Lorem-->
+
+        <!--Сarousel-->
+        <div class="container">
+        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="{% static 'products/images/UG.jpg' %}" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="{% static 'products/images/UG.jpg' %}" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="{% static 'products/images/UG.jpg' %}" class="d-block w-100" alt="...">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                    data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                    data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
     </div>
-<!--End Lorem-->
+        <!--End Сarousel-->
+
+    </div>
 
 {% endblock main %}
 

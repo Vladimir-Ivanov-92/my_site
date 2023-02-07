@@ -18,8 +18,8 @@
 
 <body>
 
-<header id="header">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-2">
+<header id="header" style="height: 80px">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top p-2" style="background-color: black;">
         <div class="container">
             <a class="navbar-brand" href="{% url 'products_home'%}">
                 <img src="{%static 'products/images/logo.ico'%}" alt="Bootstrap" width="150" height="55">
@@ -48,38 +48,30 @@
                 <div class="d-flex" id="basket_button_div">
                     <div class="d-flex" id="basket_button">
                         <!-- Кнопка корзины -->
-                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="offcanvas"
-                            data-bs-target="#basket" aria-controls="offcanvasExample">
+                        <button type="button" class="btn btn-outline-primary btn-lg position-relative" data-bs-toggle="offcanvas"
+                            data-bs-target="#basket" aria-controls="offcanvasExample" style="color:white; border-width:0">
                         <i class="fa-solid fa-cart-shopping"></i>
-{#                        <span class="position-absolute top-right badge rounded-pill bg-danger">#}
-{#                        {{baskets.total_amount}}#}
-{#                        </span>#}
                         {% if baskets %}
-                        <span class="badge rounded-pill bg-danger"> {{baskets.total_amount}} </span>
+                            <span class="position-absolute top-right badge rounded-pill bg-danger" style="">
+                            {{baskets.total_amount}}
+                            </span>
                         {% endif %}
                     </button>
 
                         {% if not request.user.is_authenticated %}
-                        <button type="button" class="btn btn-outline-success ms-2" data-bs-toggle="modal"
-                                data-bs-target="#login_ajax"><i class="fa-solid fa-right-to-bracket"></i>
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary ms-2" data-bs-toggle="modal"
-                                data-bs-target="#user_registration_ajax">Регистрация
+                        <button type="button" class="btn btn-outline-success  btn-lg ms-2" data-bs-toggle="modal"
+                                data-bs-target="#login_ajax" style="color:white; border-width:0"><i class="fa-solid fa-right-to-bracket"></i>
                         </button>
                     {% endif %}
 
                         {% if request.user.is_authenticated %}
-                    <ul class="navbar-nav me-auto mb-3 mb-lg-0">
-                        <li class="nav-item ">
-                            <a class="nav-link active text-white" aria-current="page">{{user.username}}</a>
-                        </li>
-                    </ul>
                     <div class="btn-group">
-                        <button class="btn btn-secondary dropdown-toggle ms-2" type="button" data-bs-toggle="dropdown"
-                              aria-expanded="false">
-                          {{menu_user.title}}
+                        <button class="btn btn-outline-secondary btn-lg dropdown-toggle ms-2" type="button" data-bs-toggle="dropdown"
+                              aria-expanded="false" style="color:white; border-width:0;"> <i class="fa-regular fa-user"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+                            <li><a class="dropdown-item" href="#">{{user.username}}</a></li>
+                            <li><hr class="dropdown-divider"></li>
                             {% for m_u_d in menu_user_dropdown%}
                                 <li><a class="dropdown-item" href="{% url m_u_d.url_name %}">{{m_u_d.title}}</a></li>
                             {% endfor %}
@@ -97,7 +89,7 @@
                     </div>
                 <!-- End Button trigger modal -->
                 </div>
-                {% endblock login %}
+            {% endblock login %}
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent"
                     aria-controls="navContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -116,7 +108,7 @@
     {% endblock main %}
 </main>
 
-<footer class="py-1 bg-dark" style="margin-top: auto;">
+<footer class="py-1" style="margin-top: auto; background-color: black">
     <div class="container"></div>
     <p class="m-0 text-center text-white">Copyright © Mysite 2022</p>
 

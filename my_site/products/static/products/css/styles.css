@@ -55,3 +55,41 @@ a.list-group-item {
     white-space:pre-line;
 }
 
+.badge {
+    --bs-badge-font-size: 0.5em;
+}
+
+.Contact-banner {
+    position: relative;
+    background-color: #050505;
+    color: antiquewhite;
+}
+
+.Contact-top-left {
+    position: absolute;
+    top: 100px;
+    left: 16px;
+    font-size: calc(20px + 1.5vw);
+    font-family: comic sans ms,comic-sans-w01-regular,comic-sans-w02-regular,comic-sans-w10-regular,cursive;
+    width: calc(100%/3*0.9);
+    font-style: italic;
+    cursor: pointer;
+}
+.Contact-top-right {
+    position: absolute;
+    bottom: 120px;
+    right: 16px;
+    font-size:  calc(15px + 1vw);
+    font-family: impact,impact-w01-2010,impact-w02-2010,impact-w10-2010,sans-serif;
+}
+.Contact-top-right1 {
+    position: absolute;
+    bottom: 20px;
+    right: 16px;
+    font-size:  calc(15px + 1vw);
+    width: 50%;
+    text-align: right;
+    font-family: impact,impact-w01-2010,impact-w02-2010,impact-w10-2010,sans-serif;
+    margin-top: 15px;
+}
+
