@@ -49,7 +49,7 @@ class Category(models.Model):
 
 class Feature(models.Model):
     name_product = models.CharField(max_length=50, verbose_name="Наименование продукта", null=True, blank=True)
-    shot_height = models.DecimalField(max_digits=5, decimal_places=2, null=True, verbose_name="Высота выстрела (м)")
+    shot_height = models.DecimalField(max_digits=5, decimal_places=0, null=True, verbose_name="Высота выстрела (м)")
     time_work = models.PositiveIntegerField(null=True, verbose_name="Время работы (сек)")
     number_of_charges = models.PositiveIntegerField(null=True, verbose_name="Количество зарядов (шт)")
     caliber = models.PositiveIntegerField(null=True, verbose_name="Калибр (мм)")
