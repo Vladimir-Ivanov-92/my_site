@@ -1,41 +1,42 @@
+
 <!-- Modal -->
-<div class="modal fade" id="user_registration_ajax" tabindex="-1" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Регистрация</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-            </div>
-            {#                            {% if form.errors%}#}
-            <div class="alert alert-danger d-none text-center" role="alert">XXXX, {{ form.errors }}</div>
-            {#                            {% endif %}#}
-            <div class="modal-body">
-                <form enctype="multipart/form-data" action="{% url 'registration_ajax' %}" method="post"
-                      id="form_registration_ajax">
-                    {% csrf_token %}
-                    {% for form in form_registration %}
-                        <div class="mb-3">
-                            <label for="{{ form.username.id_for_label }}" class="form-label">{{ form.label }}</label>
-                            {{ form }}
-                        </div>
-                    {% endfor %}
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Запомнить меня</label>
-                    </div>
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button class="btn btn-primary" type="submit">Войти</button>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена
-                        </button>
-                        <button type="submit" class="btn btn-primary">Войти</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- EndModal -->
+ <div class="modal fade" id="user_registration_ajax" tabindex="-1" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+     <div class="modal-dialog modal-dialog-centered">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h1 class="modal-title fs-5" id="exampleModalLabel">Регистрация</h1>
+                 <button type="button" class="btn-close" data-bs-dismiss="modal"
+                         aria-label="Close"></button>
+             </div>
+            {#{% if form.errors%}#}
+             <div class="alert alert-danger d-none text-center" role="alert">XXXX, {{ form.errors }}</div>
+            {# {% endif %}#}
+             <div class="modal-body">
+                 <form enctype="multipart/form-data" action="{% url 'registration_ajax' %}" method="post" id="form_registration_ajax">
+                     {% csrf_token %}
+                     {% for form in form_registration %}
+                         <div class="mb-3">
+                             <label for="{{form.username.id_for_label}}" class="form-label">{{form.label}}</label>
+                             {{form}}
+                         </div>
+                     {% endfor %}
+                     <div class="mb-3 form-check">
+                         <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                         <label class="form-check-label" for="exampleCheck1">Запомнить меня</label>
+                     </div>
+                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                         <button class="btn btn-primary" type="submit"
+                                 style="background-color: ghostwhite; color: black; border-color: gray">Зарегистрироваться</button>
+                     </div>
+                 </form>
+             </div>
+             <div class="modal-footer p-1" style="justify-content: center; background-color: ghostwhite;">
+                 <text style="text-decoration:none; color: black">
+                     <small>Тут могут быть ссылки на регистрацию через соц сети</small>
+                 </text>
+             </div>
+         </div>
+     </div>
+ </div>
+ <!-- EndModal -->
