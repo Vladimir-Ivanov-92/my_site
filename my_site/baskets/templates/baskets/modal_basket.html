@@ -5,12 +5,13 @@
         <h5 class="offcanvas-title" id="offcanvasExampleLabel">Корзина </h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-
     <!--  Карточки товаров в корзине-->
+
     {% if request.user.is_authenticated %}
         {#  Для Авторизированного пользователя:#}
         {% if baskets %}
             <div class="offcanvas-body">
+                <div id="ajaxbasketcardbody">
                 {% for basket in baskets %}
                     <div class="card border-success mb-3 mx-1 ">
                         <div class="card-body text-success">
@@ -25,35 +26,41 @@
                                 </div>
                                 <div class="col-lg-5">{{ basket.sum }} руб.</div>
                                 <div class="col-lg-4">
-                                    <a href="{% url 'basket_remove_auth' basket.id %}">Удалить</a>
+                                    <a href="{% url 'basket_remove_auth' basket.id %}" class="remove" >Удалить</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
+                </div>
             </div>
             <!--  END Карточки товаров в корзине-->
 
             <!-- Итого -->
-            <div class="card-footer bg-transparent border-success mt-2">
-                <div class="card border-success mb-1 mx-1">
-                    <div class="card-footer bg-transparent">
-                        <div class="row text-center">
-                            <div class="col-lg-4"><h4>Итого:</h4></div>
-                            <div class="col-lg-8"><h4>{{ baskets.total_sum }} руб.</h4></div>
+            <div class="card-footer bg-transparent border-success mt-2" id="cardfooterall">
+                <div id="ajaxbasketcardfooter">
+                    <div class="card border-success mb-1 mx-1">
+                        <div class="card-footer bg-transparent">
+                            <div class="row text-center">
+                                <div class="col-lg-4"><h4>Итого:</h4></div>
+                                <div class="col-lg-8"><h4>{{ baskets.total_sum }} руб.</h4></div>
+                            </div>
                         </div>
                     </div>
+                    <div class="d-grid gap-2 mx-1">
+                    <a href="{% url 'order_create' %}" class="btn btn-success btn-lg mb-5"> Оформить заказ </a>
                 </div>
-                <div class="d-grid gap-2 mx-1">
-                    <a href="{% url 'order_create' %}" class="btn btn-success mb-5"> Оформить заказ </a>
                 </div>
             </div>
             <!-- END Итого -->
         {% else %}
             <div class="offcanvas-body">
-                <div>
+                <div id="ajaxbasketcardbody">
                     В вашей корзине еще нет товаров...
                 </div>
+            </div>
+            <div class="card-footer bg-transparent border-success mt-2" id="cardfooterall">
+                <div id="ajaxbasketcardfooter"></div>
             </div>
         {% endif %}
 
@@ -61,8 +68,9 @@
         {#  Для Не авторизированного пользователя:#}
         {% if baskets %}
             <div class="offcanvas-body">
+                <div id="ajaxbasketcardbody">
                 {% for basket in baskets %}
-                    <div class="card border-success mb-3 mx-1 ">
+                    <div class="card border-success mb-3 mx-1 " >
                         <div class="card-body text-success">
                             <h5 class="card-title">{{ basket.product.name }}</h5>
                             <p class="card-text">{{ basket.product.category }}</p>
@@ -75,35 +83,43 @@
                                 </div>
                                 <div class="col-lg-5">{{ basket.sum }} руб.</div>
                                 <div class="col-lg-4">
-                                    <a href="{% url 'basket_remove' basket.id %}">Удалить</a>
+                                    <a href="{% url 'basket_remove' basket.id %}" class="remove" >Удалить</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
+                </div>
             </div>
             <!--  END Карточки товаров в корзине-->
 
             <!-- Итого -->
-            <div class="card-footer bg-transparent border-success mt-2">
-                <div class="card border-success mb-1 mx-1">
-                    <div class="card-footer bg-transparent">
-                        <div class="row text-center">
-                            <div class="col-lg-4"><h4>Итого:</h4></div>
-                            <div class="col-lg-8"><h4>{{ baskets.total_sum }} руб.</h4></div>
+            <div class="card-footer bg-transparent border-success mt-2" id="cardfooterall">
+                <div id="ajaxbasketcardfooter">
+                    <div class="card border-success mb-1 mx-1">
+                        <div class="card-footer bg-transparent">
+                            <div class="row text-center">
+                                <div class="col-lg-4"><h4>Итого:</h4></div>
+                                <div class="col-lg-8"><h4>{{ baskets.total_sum }} руб.</h4></div>
+                            </div>
                         </div>
                     </div>
+                    <div class="d-grid gap-2 mx-1">
+                    <a href="{% url 'order_create' %}" class="btn btn-success btn-lg mb-5" > Оформить заказ </a>
                 </div>
-                <div class="d-grid gap-2 mx-1">
-                    <a href="{% url 'order_create' %}" class="btn btn-success mb-5"> Оформить заказ </a>
                 </div>
             </div>
+
             <!-- END Итого -->
+
         {% else %}
             <div class="offcanvas-body">
-                <div>
+                <div id="ajaxbasketcardbody">
                     В вашей корзине еще нет товаров...
                 </div>
+            </div>
+            <div class="card-footer bg-transparent border-success mt-2" id="cardfooterall">
+                <div id="ajaxbasketcardfooter"></div>
             </div>
         {% endif %}
     {% endif %}

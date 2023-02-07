@@ -1,4 +1,5 @@
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 
 from baskets.models import BasketAuth, BasketFK
 from products.models import Product
@@ -21,14 +22,14 @@ def basket_add(request, product_slug):
 def basket_remove(request, basket_id):
     basket = BasketFK.objects.get(id=basket_id)
     basket.delete()
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    return render(request, "baskets/modal_basket.html")
 
 
 def basket_auth(request):
     baskets = BasketFK.objects.filter(csrftoken=request.COOKIES['csrftoken'])
     for basket in baskets:
         product = basket.product
-        basket_add = BasketAuth.objects.filter(user=request.user, product=product)
+        basket_add = BasketAuth.objects.filter(user=request.user, product=product)  #
         if not basket_add.exists():
             BasketAuth.objects.create(user=request.user, product=basket.product, amount=basket.amount,
                                       time_create=basket.time_create)
@@ -56,4 +57,5 @@ def basket_add_auth(request, product_slug):
 def basket_remove_auth(request, basket_id):
     basket = BasketAuth.objects.get(id=basket_id)
     basket.delete()
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])  # тут в response  передается весь html и базовый и
+    # модальные окна в т.ч.

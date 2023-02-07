@@ -47,7 +47,7 @@ menu_user_dropdown = [
     },
     {
         "title": "Админ панель",
-        "url_name": "admin:index"
+        "url_name": "admin:index"  # FIXMI заменить ссылкой на админку!
     },
 
 ]
@@ -63,6 +63,9 @@ def get_context_data(request):
         except KeyError:
             baskets = None
 
+    # cart = Cart(request)
+    # cart_product_form = CartAddProductForm()  #FIXMI!!!!!
+
     update_menu = menu.copy()
     update_contacts_dropdown = contacts_dropdown.copy()
     update_menu_user_dropdown = menu_user_dropdown.copy()
@@ -75,7 +78,9 @@ def get_context_data(request):
         "contacts": contacts,
         "contacts_dropdown": update_contacts_dropdown,
         "menu_user": menu_user,
-        "menu_user_dropdown": update_menu_user_dropdown
+        "menu_user_dropdown": update_menu_user_dropdown,
+        # "cart": cart,
+        # "cart_product_form":cart_product_form  #FIXMI!!!!!!
     }
 
     return context
