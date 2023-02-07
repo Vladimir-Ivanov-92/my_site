@@ -12,12 +12,14 @@ class Order(models.Model):
     CREATED = 1
     IN_WORK = 2
     DELIVERED = 3
+    CANCELLED = 4
 
     STATUSES = [
         (TEMPORARY, 'Временный'),
         (CREATED, 'Создан'),
         (IN_WORK, 'В работе'),
         (DELIVERED, 'Доставлен'),
+        (CANCELLED, 'Отменен'),
     ]
 
     first_name = models.CharField(max_length=64)
@@ -62,7 +64,7 @@ class Order(models.Model):
             subject=subject,
             message=message,
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=['.....@.....ru'],  # FIXMI!!! Исправить на [self.email] !!!
+            recipient_list=['vova2092@yandex.ru'],  # FIXMI!!! Исправить на [self.email] !!!
             fail_silently=False,
         )
 

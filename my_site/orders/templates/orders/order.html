@@ -8,6 +8,13 @@
     <div class="container pt-5">
         <div class="text-center mt-5">
             <h1>Заказ №{{ object.id }}</h1>
+            <div class="d-flex flex-column" style="align-items: flex-start;">
+                <p class="mb-2"><b>Статус:</b>  {{ object.get_status_display }}</p>
+                <p class="mb-0"><b>Имя:</b>  {{ object.first_name }}</p>
+                <p class="mb-0"><b>Фамилия:</b> {{ object.last_name }}</p>
+                <p class="mb-0"><b>Email:</b> {{object.email}}</p>
+                <p class="mb-0"><b>Адрес доставки:</b> {{ object.address }}</p>
+            </div>
             <div class="orders mt-5">
                 <table class="table">
                     <thead>
@@ -21,9 +28,7 @@
                     <tbody>
                     {% for order_item in object.basket_history.order_items %}
                     <tr>
-                        <th scope="row">
-                            {{ order_item.product_name }}
-                        </th>
+                        <td>{{ order_item.product_name }}</td>
                         <td>{{ order_item.amount }}</td>
                         <td>{{ order_item.price|intcomma }} руб.</td>
                         <td>{{ order_item.sum|intcomma }} руб.</td>
