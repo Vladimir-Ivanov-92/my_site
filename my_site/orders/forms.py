@@ -9,19 +9,19 @@ class OrderForm(forms.ModelForm):
     first_name = forms.CharField(label="Имя", widget=forms.TextInput(
         attrs={
             'class': 'form-control',
-            'placeholder': 'Вася'
+            'placeholder': 'Иван'
         }
     ))
     last_name = forms.CharField(label="Фамилия", widget=forms.TextInput(
         attrs={
             'class': 'form-control',
-            'placeholder': 'Пупкин'
+            'placeholder': 'Петров'
         }
     ))
     email = forms.EmailField(label="Адрес электронной почты", widget=forms.EmailInput(
         attrs={
             'class': 'form-control',
-            'placeholder': 'vasya@example.ru'
+            'placeholder': 'ivan@example.ru'
          }
     ))
     phone_number = PhoneNumberField(label="Номер телефона", widget=RegionalPhoneNumberWidget(

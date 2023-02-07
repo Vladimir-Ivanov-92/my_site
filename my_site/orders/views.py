@@ -19,6 +19,12 @@ class OrderCreateView(DataMixin, CreateView):
         context_def = self.get_user_context(title="Создание заказа")
         return dict(list(context.items()) + list(context_def.items()))
 
+    def get_initial(self):
+        if self.request.user.is_authenticated:
+            return {'email': self.request.user.email}
+        else:
+            return super().get_initial()
+
     def form_valid(self, form):
         if self.request.user.is_authenticated:
             form.instance.initiator = self.request.user
@@ -27,7 +33,7 @@ class OrderCreateView(DataMixin, CreateView):
             order = Order.objects.get(initiator=self.request.user, status=0)
             order.update_after_oder()
             order.send_message_for_staff_about_order()
-            if order.initiator.is_verified_email:
+            if order.initiator.is_verified_email and (form.cleaned_data['email'] == order.initiator.email):
                 order.send_message_for_user_about_order()
         else:
             form.instance.csrftoken = self.request.COOKIES['csrftoken']
