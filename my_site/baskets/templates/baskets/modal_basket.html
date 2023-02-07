@@ -1,4 +1,6 @@
 {% load catalog_tags %}
+{% load humanize %}
+
 <div class="offcanvas offcanvas-end " tabindex="-1" id="basket" aria-labelledby="offcanvasExampleLabel"
      data-disableScrolling="false">
 
@@ -19,7 +21,7 @@
                             <h5 class="card-title">{{ basket.product.name }}</h5>
                             <p class="card-text">{{ basket.product.category }}</p>
                         </div>
-                        <div class="card-footer bg-transparent border-sucess">
+                        <div class="card-footer bg-transparent border-success">
                             <div class="row text-center">
                                 <div class="col-lg-5 p-0">
 {#                                    <input name="basketID" type="number" class="form-control"#}
@@ -30,7 +32,7 @@
                                     <a href="{% url 'basket_add_auth' basket.product.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
                                         id="{{ basket.product.pk }}">+</a>
                                 </div>
-                                <div class="col-lg-4 p-0">{{ basket.sum }} руб.</div>
+                                <div class="col-lg-4 p-0">{{ basket.sum|intcomma }} руб.</div>
                                 <div class="col-lg-3 p-0">
                                     <a href="{% url 'basket_remove_auth' basket.id %}" class="remove"
                                        id="{{ basket.product_id }}"><i class="fa-solid fa-trash" style="color: black"></i>
@@ -51,7 +53,7 @@
                         <div class="card-footer bg-transparent">
                             <div class="row text-center">
                                 <div class="col-lg-4"><h4>Итого:</h4></div>
-                                <div class="col-lg-8"><h4>{{ baskets.total_sum }} руб.</h4></div>
+                                <div class="col-lg-8"><h4>{{ baskets.total_sum|intcomma }} руб.</h4></div>
                             </div>
                         </div>
                     </div>
@@ -94,7 +96,7 @@
                                     <a href="{% url 'basket_add' basket.product.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
                                         id="{{ basket.product.pk }}">+</a>
                                 </div>
-                                <div class="col-lg-4 p-0">{{ basket.sum }} руб.</div>
+                                <div class="col-lg-4 p-0">{{ basket.sum|intcomma }} руб.</div>
                                 <div class="col-lg-3 p-0">
                                     <a href="{% url 'basket_remove' basket.id %}" class="remove"
                                        id="{{ basket.product_id }}"><i class="fa-solid fa-trash" style="color: black"></i>
@@ -115,7 +117,7 @@
                         <div class="card-footer bg-transparent">
                             <div class="row text-center">
                                 <div class="col-lg-4"><h4>Итого:</h4></div>
-                                <div class="col-lg-8"><h4>{{ baskets.total_sum }} руб.</h4></div>
+                                <div class="col-lg-8"><h4>{{ baskets.total_sum|intcomma }} руб.</h4></div>
                             </div>
                         </div>
                     </div>

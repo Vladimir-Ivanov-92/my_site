@@ -34,6 +34,11 @@
                                 </div>
                             </li>
                         {% endfor %}
+                        {# Итого к оплате #}
+{#                        <li class="list-group-item d-flex justify-content-between">#}
+{#                            <span>Сумма к оплате</span>#}
+{#                            <strong> {{ baskets.total_sum|intcomma}} руб.</strong>#}
+{#                        </li>#}
                     {% endif %}
                 </ul>
             </div>
@@ -78,7 +83,7 @@
                             <strong> {{ baskets.total_sum|intcomma}} руб.</strong>
                         </li>
                     </div>
-                    <button class="w-100 btn btn-primary btn-lg mt-3" type="submit" >Оформить заказ</button>
+                    <button class="w-100 btn btn-primary btn-lg mt-3 mb-3" type="submit" >Оформить заказ</button>
                 </form>
             </div>
         </div>

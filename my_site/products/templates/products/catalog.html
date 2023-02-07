@@ -1,7 +1,7 @@
 {% extends 'products/base.html' %}
 {% load static cache %}
 {% load catalog_tags %}
-
+{% load humanize %}
 
 {% block main %}
 
@@ -94,20 +94,37 @@
         <div class="col-lg-9">
             {% if view_cards %}
             <!--Cards-->
-            <div class="row row-cols-1 row-cols-md-3 g-4 mt-0 mb-4">
+            <div class="row row-cols-2 row-cols-md-4 g-4 mt-0 mb-4">
 {#            {% cache 30 products %}#}
-
               {% for p in products %}
               <div class="col" id="{{ p.pk }}">
-                <div class="card h-100">
+                <div class="card h-100 text-center">
                   {% if p.image %}
                   <img src="{{p.image.url}}" class="card-img-top"  alt="...">
                   {% endif %}
-                  <div class="card-body text-center">
-                    <h5 class="card-title"><a href="{{p.get_absolute_url}}">{{p.name}}</a></h5>
-                    <h5>{{p.price}} руб.</h5>
-                    <p class="card-text">Калибр: {{p.characteristic.caliber}} мм.</p>
-                    <p class="card-text">Время работы: {{p.characteristic.time_work}} сек.</p>
+                  <div class="card-body" style="padding: 2px; border-color: red; border-radius: 5px">
+                      <div class="d-flex" style="height: 50px; justify-content: center; align-items: center">
+{#                        <h7 class="card-title"><a href="{{p.get_absolute_url}}"#}
+{#                                              style="text-decoration: none; color: black">{{p.name}}</a></h7>#}
+                          <a href="#" class="" style="text-decoration: none; color: black"
+                                  data-bs-toggle="popover"
+                                  data-bs-placement="top"
+                                  data-bs-custom-class="custom-popover"
+                                  data-bs-trigger="focus"
+                                  data-bs-title="Характеристика"
+                                  data-bs-content="Калибр: {{p.characteristic.caliber}}
+                                                   Время работы: {{p.characteristic.time_work}} сек.">
+                              {{p.name}}
+                          </a>
+                      </div>
+                      <div class="d-flex" style="height: 30px; justify-content: center; align-items: center">
+                        <h7> <strong>{{p.price|intcomma}} руб.</strong></h7>
+                      </div>
+                      <div class="d-flex" style="justify-content: center; align-items: center">
+
+                      </div>
+{#                    <p class="card-text">Калибр: {{p.characteristic.caliber}} мм.</p>#}
+{#                    <p class="card-text">Время работы: {{p.characteristic.time_work}} сек.</p>#}
 {#                    <p class="card-text">{{p.description|linebreaks|truncatewords:20}}</p>#}
                   </div>
                   <div class="card-footer text-center" id="cardfooter{{ p.pk }}">
@@ -140,52 +157,58 @@
                 </div>
               </div>
               {% endfor %}
-
 {#            {% endcache %}#}
             </div>
             <!--End Cards-->
             {% else %}
             <!--Table-->
-            <div class="row row-cols-1 row-cols-md-3 g-4 mt-0 mb-4">
-                <table class="table" style="margin-top: 14px">
-                    <thead>
+            <div class="table-responsive-sm">
+                <table class="table table-hover table-sm" style="height: 100px;">
+                    <thead class="table-light text-center">
                     <tr>
-                        <th scope="col">Артикль</th>
+{#                        <th scope="col">Артикль</th>#}
                         <th scope="col">Название</th>
+                        <th scope="col"></th>
                         <th scope="col"></th>
                         <th scope="col">Цена</th>
                         <th></th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table-group-divider">
                     {% for p in products %}
-                    <tr>
-                        <td>{{ p.article }}</td>
-                        <td>{{ p.name }}</td>
-                        <td><img src="{{p.image.url}}" style="width: 50px; height: 50px"  alt="..."></td>
-                        <td>{{ p.price }}.</td>
-                        <td id="cardfooter{{ p.pk }}" style="width: 200px">
+                    <tr class="text-center align-middle">
+{#                        <td>{{ p.article }}</td>#}
+                        <td><small>{{ p.article }}  {{ p.name }}</small></td>
+                        <td >
+                            <a data-fancybox="" data-caption="Фейерверк Тик-так" href="https://video.rufire.ru/9461.mp4"
+                               class="cart-product-body-left-description-top-video__link cart-link_hover">
+                                <i class="fa-solid fa-video" style="color: gray"></i>
+                            </a>
+                        </td>
+                        <td class="d-none d-sm-block"> <img src="{{p.image.url}}" style="width: 50px; height: 50px"  alt="..."></td>
+                        <td> {{ p.price|intcomma}}р.</td>
+                        <td id="cardfooter{{ p.pk }}" style="width: 110px">
                             <div id="cardfooterdiv{{ p.pk }}">
                                 {% if request.user.is_authenticated %}
                                     {% if p.pk in baskets_product_id %}
-                                      <a href="{% url 'basket_minus_auth' p.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
+                                      <a href="{% url 'basket_minus_auth' p.slug %}" class="btn btn-outline-success btn-sm plus_or_minus_to_basket"
                                          id="{{ p.pk }}">-</a>
-                                      <a href="#" class="btn btn-success disabled">{%  get_BasketAuth_product_amount request=request pk=p.pk %}</a>
-                                      <a href="{% url 'basket_add_auth' p.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
+                                      <a href="#" class="btn btn-success btn-sm disabled">{%  get_BasketAuth_product_amount request=request pk=p.pk %}</a>
+                                      <a href="{% url 'basket_add_auth' p.slug %}" class="btn btn-outline-success btn-sm plus_or_minus_to_basket"
                                          id="{{ p.pk }}">+</a>
                                     {% else %}
-                                      <a href="{% url 'basket_add_auth' p.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
+                                      <a href="{% url 'basket_add_auth' p.slug %}" class="btn btn-outline-success btn-sm plus_or_minus_to_basket"
                                          id="{{ p.pk }}">В корзину</a> {# В js используется id (№) для идентификации объекта из списка #}
                                     {% endif %}
                                 {% else %}
                                     {% if p.pk in baskets_product_id %}
-                                      <a href="{% url 'basket_minus' p.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
+                                      <a href="{% url 'basket_minus' p.slug %}" class="btn btn-outline-success btn-sm plus_or_minus_to_basket"
                                          id="{{ p.pk }}">-</a>
-                                      <a href="#" class="btn btn-success disabled">{%  get_BasketFk_product_amount request=request pk=p.pk %}</a>
-                                      <a href="{% url 'basket_add' p.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
+                                      <a href="#" class="btn btn-success btn-sm disabled">{%  get_BasketFk_product_amount request=request pk=p.pk %}</a>
+                                      <a href="{% url 'basket_add' p.slug %}" class="btn btn-outline-success btn-sm plus_or_minus_to_basket"
                                          id="{{ p.pk }}">+</a>
                                     {% else %}
-                                      <a href="{% url 'basket_add' p.slug %}" class="btn btn-outline-success plus_or_minus_to_basket"
+                                      <a href="{% url 'basket_add' p.slug %}" class="btn btn-outline-success btn-sm plus_or_minus_to_basket"
                                          id="{{ p.pk }}">В корзину</a> {# В js используется id (№) для идентификации объекта из списка #}
                                     {% endif %}
                                 {% endif %}
@@ -232,4 +255,5 @@
         </div>
     </div>
 </div>
+
 {% endblock main %}
