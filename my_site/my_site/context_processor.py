@@ -45,10 +45,10 @@ menu_user_dropdown = [
         "title": "Заказы",
         "url_name": "orders_list"
     },
-    {
-        "title": "Админ панель",
-        "url_name": "admin:index"  # FIXMI заменить ссылкой на админку!
-    },
+    # {
+    #     "title": "Админ панель",
+    #     "url_name": "admin:index"  # FIXMI заменить ссылкой на админку!
+    # },
 
 ]
 

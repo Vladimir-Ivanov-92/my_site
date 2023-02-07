@@ -3,43 +3,75 @@
 
 {% block main %}
 
-<!-- Page Content -->
-<section>
-    <div class="container pt-5">
-        <div class="text-center mt-5">
-            <h1>Создан заказ №{{ object.id }}</h1>
-            <div class="orders mt-5">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">Название</th>
-                        <th scope="col">Кол-во</th>
-                        <th scope="col">Цена</th>
-                        <th scope="col">Сумма</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for order_item in object.basket_history.order_items %}
-                    <tr>
-                        <th scope="row">
-                            {{ order_item.product_name }}
-                        </th>
-                        <td>{{ order_item.amount }}</td>
-                        <td>{{ order_item.price|intcomma }} руб.</td>
-                        <td>{{ order_item.sum|intcomma }} руб.</td>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-                <div class="d-flex" style="justify-content: flex-end">
-                    <p class="h4 mt-3">Итого {{ object.basket_history.total_sum|intcomma }} руб.</p>
-                </div>
-                <div>
-                    <p class="mt-5">Мы с Вами свяжемся в ближайшее время для уточнения деталей заказа и согласования времени доставки.</p>
+    <!-- Page Content -->
+    <section>
+        <div class="container pt-5">
+            <div class="text-center mt-5">
+                <h1>Создан заказ №{{ object.id }}</h1>
+                <div class="orders mt-5">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Название</th>
+                            <th scope="col">Кол-во</th>
+                            <th scope="col">Цена</th>
+                            <th scope="col">Сумма</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for order_item in object.basket_history.order_items %}
+                            <tr>
+                                <th scope="row">
+                                    {{ order_item.product_name }}
+                                </th>
+                                <td>{{ order_item.amount }}</td>
+                                <td>{{ order_item.price|intcomma }} руб.</td>
+                                <td>{{ order_item.sum|intcomma }} руб.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="d-flex" style="justify-content: flex-end">
+                        <p class="h4 mt-3">Итого {{ object.basket_history.total_sum|intcomma }} руб.</p>
+                    </div>
+                    <div>
+                        <p class="mt-5">Мы с Вами свяжемся в ближайшее время для уточнения деталей заказа и согласования
+                            времени доставки.</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+
+    <!--Пагинация-->
+    {% if page_obj.has_other_pages %}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% for p in paginator.page_range %}
+                    {% if page_obj.number == p %}
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="?page={{ p }}">{{ p }}<span class="sr-only"></span></a></li>
+                    {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                        <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+    <!--Конец погинации-->
 
 {% endblock main %}

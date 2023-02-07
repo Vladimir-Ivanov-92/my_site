@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.mail import send_mail
 from django.db import models
+from django.urls import reverse
 
 from baskets.models import BasketAuth, BasketFK
 from users.models import User
@@ -34,6 +35,8 @@ class Order(models.Model):
 
     def send_order_mail(self):
         subject = f"Создан заказ №{self.id}"
+        link = reverse('orders_for_staff')
+        orders_for_staff_link = f"{settings.DOMAIN_NAME}{link}"
         message = (
             f"Покупатель:\n"
             f"Имя: {self.first_name} \n"
@@ -42,6 +45,8 @@ class Order(models.Model):
             f"Адрес доставки: {self.address} \n \n"
             f"Заказ №{self.id}:\n"
             f"Общая сумма заказа: {self.basket_history['total_sum']}руб. \n"
+            f"Перейти на страницу заказов: {orders_for_staff_link} \n\n"
+            f"#Товары в заказе: \n"
         )
 
         for i in range(self.basket_history['order_items'].__len__()):

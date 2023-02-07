@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView
@@ -68,3 +69,21 @@ class OrderIsCreateView(DataMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context_def = self.get_user_context(title=f"Создан заказ №{self.object.id}")
         return dict(list(context.items()) + list(context_def.items()))
+
+
+class OrdersListForStaffView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    template_name = 'orders/orders_for_staff.html'
+    model = Order
+    ordering = ('-created')
+    paginate_by = 12
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        return HttpResponseRedirect(reverse_lazy('products_home'))
+
+    def get_context_data(self, *, object_list=None, **kwargs):  # FIXMI! Сделать ТitleMixin
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Заказы"
+        return context

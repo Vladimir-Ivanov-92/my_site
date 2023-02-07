@@ -51,7 +51,8 @@
                 <!-- Button trigger modal -->
                 <div class="d-flex" id="basket_button_div">
                     <div class="d-flex" id="basket_button">
-                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="offcanvas"
+                        <!-- Кнопка корзины -->
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="offcanvas"
                             data-bs-target="#basket" aria-controls="offcanvasExample">
                         <i class="fa-solid fa-cart-shopping"></i>
 {#                        <span class="position-absolute top-right badge rounded-pill bg-danger">#}
@@ -62,7 +63,7 @@
                         {% endif %}
                     </button>
 
-                    {% if not request.user.is_authenticated %}
+                        {% if not request.user.is_authenticated %}
                         <button type="button" class="btn btn-outline-success ms-2" data-bs-toggle="modal"
                                 data-bs-target="#login_ajax">Войти
                         </button>
@@ -71,27 +72,33 @@
                         </button>
                     {% endif %}
 
-                    {% if request.user.is_authenticated %}
+                        {% if request.user.is_authenticated %}
                     <ul class="navbar-nav me-auto mb-3 mb-lg-0">
                         <li class="nav-item ">
                             <a class="nav-link active text-white" aria-current="page">{{user.username}}</a>
                         </li>
                     </ul>
                     <div class="btn-group">
-                      <button class="btn btn-secondary dropdown-toggle ms-2" type="button" data-bs-toggle="dropdown"
+                        <button class="btn btn-secondary dropdown-toggle ms-2" type="button" data-bs-toggle="dropdown"
                               aria-expanded="false">
                           {{menu_user.title}}
-                      </button>
-                      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-                        {% for m_u_d in menu_user_dropdown%}
-                            <li><a class="dropdown-item" href="{% url m_u_d.url_name%}">{{m_u_d.title}}</a></li>
-                        {% endfor %}
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{% url menu_user.url_logout %}">{{menu_user.logout}}</a></li>
-                      </ul>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+                            {% for m_u_d in menu_user_dropdown%}
+                                <li><a class="dropdown-item" href="{% url m_u_d.url_name %}">{{m_u_d.title}}</a></li>
+                            {% endfor %}
+                            <li><hr class="dropdown-divider"></li>
+                                {% if request.user.is_staff %}
+                                    <li><a class="dropdown-item" href="{% url 'orders_for_staff' %}">Все заказы</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'admin:index' %}">Админка</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                {% endif %}
+                            <li><a class="dropdown-item" href="{% url menu_user.url_logout %}">{{menu_user.logout}}</a></li>
+                        </ul>
                     </div>
                     {% endif %}
-                </div>
+
+                    </div>
                 <!-- End Button trigger modal -->
                 {% endblock login %}
                 </div>
