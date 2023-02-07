@@ -1,10 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView
 
-from orders import forms
 from orders.forms import OrderForm
 from orders.models import Order
 from products.utils import DataMixin
@@ -33,7 +33,7 @@ class OrderCreateView(DataMixin, CreateView):
             if self.request.user.is_verified_email:
                 super().form_valid(form)
             else:
-                form.add_error('email', forms.ValidationError('Электронная почта не подтверждена'))
+                form.add_error('email', ValidationError('Электронная почта не подтверждена'))
                 return super().form_invalid(form)
             order = Order.objects.get(initiator=self.request.user, status=0)
             order.update_after_oder()
@@ -56,7 +56,7 @@ class OrdersListView(DataMixin, ListView):
     queryset = Order.objects.all()
     ordering = ('-created')
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs):  # FIXMI! Сделать ТitleMixin
         context = super().get_context_data(**kwargs)
         context_def = self.get_user_context(title="Заказы")
         return dict(list(context.items()) + list(context_def.items()))
