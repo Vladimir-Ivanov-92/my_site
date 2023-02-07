@@ -6,9 +6,9 @@
         <h5 class="offcanvas-title" id="offcanvasExampleLabel">Корзина </h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <!--  Карточки товаров в корзине-->
+q    <!--  Карточки товаров в корзине-->
 
-    {% if request.user.is_authenticated %}
+    c{% if request.user.is_authenticated %}
         {#  Для Авторизированного пользователя:#}
         {% if baskets %}
             <div class="offcanvas-body">
@@ -19,7 +19,7 @@
                             <h5 class="card-title">{{ basket.product.name }}</h5>
                             <p class="card-text">{{ basket.product.category }}</p>
                         </div>
-                        <div class="card-footer bg-transparent border-success">
+                        <div class="card-footer bg-transparent border-sucess">
                             <div class="row text-center">
                                 <div class="col-lg-5 p-0">
 {#                                    <input name="basketID" type="number" class="form-control"#}
@@ -33,7 +33,8 @@
                                 <div class="col-lg-4 p-0">{{ basket.sum }} руб.</div>
                                 <div class="col-lg-3 p-0">
                                     <a href="{% url 'basket_remove_auth' basket.id %}" class="remove"
-                                       id="{{ basket.product_id }}">Удалить</a>
+                                       id="{{ basket.product_id }}"><i class="fa-solid fa-trash" style="color: black"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -96,7 +97,8 @@
                                 <div class="col-lg-4 p-0">{{ basket.sum }} руб.</div>
                                 <div class="col-lg-3 p-0">
                                     <a href="{% url 'basket_remove' basket.id %}" class="remove"
-                                       id="{{ basket.product_id }}" >Удалить</a>
+                                       id="{{ basket.product_id }}"><i class="fa-solid fa-trash" style="color: black"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
