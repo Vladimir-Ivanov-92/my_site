@@ -81,6 +81,7 @@ def get_context_data(request):
         "menu_user": menu_user,
         "menu_user_dropdown": update_menu_user_dropdown,
         "baskets_product_id": baskets_product_id,
+        "view_cards": True,
     }
 
     return context

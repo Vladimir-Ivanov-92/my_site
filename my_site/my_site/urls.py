@@ -20,8 +20,7 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('products/', include('products.urls'), name="products"),
-    path('', include('products.urls'), name="products"),
+    path('products/', include('products.urls'), name="products"),
     path('users/', include('users.urls'), name="users"),
     path('baskets/', include('baskets.urls'), name="baskets"),
     path('orders/', include('orders.urls'), name="orders"),
@@ -31,4 +30,4 @@ if settings.DEBUG:
     urlpatterns.append(path('__debug__/', include('debug_toolbar.urls')))
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-handler404 = "mysite_1_drf.views.page_not_found_view"
+handler404 = "my_site.views.page_not_found_view"
