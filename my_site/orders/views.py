@@ -39,7 +39,7 @@ class OrderCreateView(DataMixin, CreateView):
 class OrdersListView(DataMixin, ListView):
     template_name = 'orders/orders.html'
     queryset = Order.objects.all()
-    ordering = ('created')
+    ordering = ('-created')
 
     def get_context_data(self, *, object_list=None, **kwargs):  # FIXMI! Сделать ТitleMixin
         context = super().get_context_data(**kwargs)
@@ -74,7 +74,7 @@ class OrderIsCreateView(DataMixin, DetailView):
 class OrdersListForStaffView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     template_name = 'orders/orders_for_staff.html'
     model = Order
-    ordering = ('-created')
+    ordering = ('status', '-created')
     paginate_by = 12
 
     def test_func(self):
@@ -87,3 +87,9 @@ class OrdersListForStaffView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = "Заказы"
         return context
+
+
+def change_status_order(request, orders_id, status):
+    order = Order.objects.filter(id=orders_id)
+    order.update(status=status)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
