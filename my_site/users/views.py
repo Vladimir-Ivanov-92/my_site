@@ -1,7 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import TemplateView
 
@@ -86,4 +85,6 @@ class EmailVerificationView(TemplateView):
             email_verification.delete()
             return super(EmailVerificationView, self).get(request, *args, **kwargs)
         else:
-            return HttpResponseRedirect(reverse_lazy('products_home'))
+            email_verification.delete()
+            user.delete()
+            return render(request, 'users/time_to_verificate_expired.html')

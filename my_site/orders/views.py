@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView
 
+from orders import forms
 from orders.forms import OrderForm
 from orders.models import Order
 from products.utils import DataMixin
@@ -29,7 +30,11 @@ class OrderCreateView(DataMixin, CreateView):
         if self.request.user.is_authenticated:
             form.instance.initiator = self.request.user
             form.instance.phone_number = form.cleaned_data['phone_number']
-            super().form_valid(form)
+            if self.request.user.is_verified_email:
+                super().form_valid(form)
+            else:
+                form.add_error('email', forms.ValidationError('Электронная почта не подтверждена'))
+                return super().form_invalid(form)
             order = Order.objects.get(initiator=self.request.user, status=0)
             order.update_after_oder()
             order.send_message_for_staff_about_order()
