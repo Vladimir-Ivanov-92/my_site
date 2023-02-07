@@ -11,12 +11,39 @@
     <div class="row mt-2">
         <div class="col-lg-3"></div>
         <div class="col-lg-9">
+            {% if view_cards %}
+                {% if category_selected != 0 %}
+                <a href="#" class="btn btn-secondary disabled btn-sm">
+                    <i class="fa-solid fa-table-cells-large fa-lg p-2"></i>
+                </a>
+                <a href="{% url 'category_table_page' slug %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="fa-solid fa-bars fa-lg p-2"></i>
+                </a>
+                {% else %}
+                <a href="#" class="btn btn-secondary disabled btn-sm">
+                    <i class="fa-solid fa-table-cells-large fa-lg p-2"></i>
+                </a>
+                <a href="{% url 'products_table_catalog' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="fa-solid fa-bars fa-lg p-2"></i>
+                </a>
+                {% endif %}
+            {% else %}
+                {% if category_selected != 0 %}
+                <a href="{% url 'category_page' slug %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="fa-solid fa-table-cells-large fa-lg p-2"></i>
+                </a>
+                <a href="#" class="btn btn-secondary disabled btn-sm">
+                    <i class="fa-solid fa-bars fa-lg p-2"></i>
+                </a>
+                {% else %}
                 <a href="{% url 'products_catalog' %}" class="btn btn-outline-secondary btn-sm">
                     <i class="fa-solid fa-table-cells-large fa-lg p-2"></i>
                 </a>
-                <a href="{% url 'table_view' %}" class="btn btn-outline-secondary btn-sm">
+                <a href="#" class="btn btn-secondary disabled btn-sm">
                     <i class="fa-solid fa-bars fa-lg p-2"></i>
                 </a>
+                {% endif %}
+            {% endif %}
         </div>
     </div>
     <!--End icon cards/table-->
@@ -24,22 +51,43 @@
     <div class="row">
         <div class="col-lg-3">
             <!--        Filter categories-->
-            <div class="list-group mt-4">
-                {% if category_selected == 0 %}
+            {% if view_cards %}
+                <div class="list-group mt-4">
+                    {% if category_selected == 0 %}
                 <a href="#"class="list-group-item disabled">Все категории</a>
                 {% else %}
                 <a href="{% url 'products_catalog' %}"class="list-group-item">Все категории</a>
                 {% endif %}
-                {% for category in categories %}
+                    {% for category in categories %}
                     {% if category.product__count > 0 %}
                         {% if category.pk == category_selected %}
                             <a href="#"class="list-group-item disabled">{{category.name}}</a>
                         {%  else %}
-                            <a href="{{category.get_absolute_url}}" class="list-group-item">{{category.name}}</a>
+{#                            <a href="{{category.get_absolute_url}}" class="list-group-item">{{category.name}}</a>#}
+                            <a href="{% url 'category_page' category.slug %}" class="list-group-item">{{category.name}}</a>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
             </div>
+            {% else %}
+                <div class="list-group mt-4">
+                    {% if category_selected == 0 %}
+                <a href="#"class="list-group-item disabled">Все категории</a>
+                {% else %}
+                <a href="{% url 'products_table_catalog' %}"class="list-group-item">Все категории</a>
+                {% endif %}
+                    {% for category in categories %}
+                    {% if category.product__count > 0 %}
+                        {% if category.pk == category_selected %}
+                            <a href="#"class="list-group-item disabled">{{category.name}}</a>
+                        {%  else %}
+{#                            <a href="{{category.get_absolute_url}}" class="list-group-item">{{category.name}}</a>#}
+                            <a href="{% url 'category_table_page' category.slug %}" class="list-group-item">{{category.name}}</a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
             <!--        End Filter categories-->
         </div>
 

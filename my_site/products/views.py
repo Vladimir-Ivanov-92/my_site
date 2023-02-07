@@ -42,7 +42,8 @@ class CategoryView(DataMixin, ListView):
         context = super().get_context_data(**kwargs)
         context_def = self.get_user_context(title=Category.objects.get(slug=self.kwargs["category_slug"]).name,
                                             category_selected=Category.objects.get(
-                                                slug=self.kwargs["category_slug"]).id)
+                                                slug=self.kwargs["category_slug"]).id,
+                                            slug=self.kwargs['category_slug'])
         return dict(list(context.items()) + list(context_def.items()))
 
     def get_queryset(self):
@@ -69,3 +70,34 @@ def feedback_page(request):
 
 def delivery_and_pay_page(request):
     return HttpResponse("dostavka_and_pay_page")
+
+
+class CatalogTableView(DataMixin, ListView):
+    model = Product
+    template_name = 'products/catalog.html'
+    context_object_name = "products"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context_def = self.get_user_context(title="Каталог", view_cards=False)
+
+        return dict(list(context.items()) + list(context_def.items()))
+
+
+class CategoryTableView(DataMixin, ListView):
+    model = Product
+    template_name = 'products/catalog.html'
+    context_object_name = "products"
+    allow_empty = False
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context_def = self.get_user_context(title=Category.objects.get(slug=self.kwargs["category_slug"]).name,
+                                            category_selected=Category.objects.get(
+                                                slug=self.kwargs["category_slug"]).id,
+                                            slug=self.kwargs['category_slug'],
+                                            view_cards=False)
+        return dict(list(context.items()) + list(context_def.items()))
+
+    def get_queryset(self):
+        return Product.objects.filter(category__slug=self.kwargs["category_slug"], on_sale=True)
