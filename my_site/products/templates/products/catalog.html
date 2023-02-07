@@ -180,7 +180,8 @@
 {#                        <th scope="col">Артикль</th>#}
                         <th scope="col">Название</th>
                         <th scope="col"></th>
-                        <th class="d-none d-sm-block" scope="col"></th>
+                        <th scope="col"></th>
+{#                        <th scope="col" class="d-none d-sm-block"></th>#}
                         <th scope="col">Цена</th>
                         <th></th>
                     </tr>
@@ -189,8 +190,8 @@
                     {% for p in products %}
                     <tr class="text-center align-middle">
 {#                        <td>{{ p.article }}</td>#}
-                        <td style="width: 150px"><small>{{ p.article }}  {{ p.name }}</small></td>
-                        <td >
+                        <td><small>{{ p.article }} {{ p.name }}</small></td>
+                        <td>
                             <a data-caption="Фейерверк Тик-так" href="https://video.rufire.ru/9461.mp4"
                                class="cart-product-body-left-description-top-video__link cart-link_hover">
                                 <i class="fa-solid fa-video" style="color: gray"></i>
