@@ -5,6 +5,7 @@ from django.urls import reverse
 from phonenumber_field.modelfields import PhoneNumberField
 
 from baskets.models import BasketAuth, BasketFK
+from orders.telegram import send_message_about_order_in_telegram
 from users.models import User
 
 
@@ -63,11 +64,12 @@ class Order(models.Model):
                 f"Всего: {self.basket_history['order_items'][i]['sum']}руб. \n"
             )
 
+        send_message_about_order_in_telegram(message)
         send_mail(
             subject=subject,
             message=message,
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=['vova2092@yandex.ru'],  # FIXMI!!! Исправить на [self.email] !!!
+            recipient_list=['....@.....ru'],  # FIXMI!!! Исправить на [self.email] !!!
             fail_silently=False,
         )
 
