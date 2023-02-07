@@ -38,7 +38,20 @@ class Order(models.Model):
     def __str__(self):
         return f"Order #{self.id} {self.first_name} {self.last_name}"
 
-    def send_order_mail(self):
+    def update_after_oder(self, csrftoken=None):
+        if not self.initiator:
+            baskets = BasketFK.objects.filter(csrftoken=csrftoken)
+        else:
+            baskets = BasketAuth.objects.filter(user=self.initiator)
+        self.status = self.CREATED
+        self.basket_history = {
+            'order_items': [basket.de_json() for basket in baskets],
+            'total_sum': float(baskets.total_sum()),
+        }
+        baskets.delete()
+        self.save()
+
+    def send_message_for_staff_about_order(self):
         subject = f"Создан заказ №{self.id}"
         link = reverse('orders_for_staff')
         orders_for_staff_link = f"{settings.DOMAIN_NAME}{link}"
@@ -68,20 +81,6 @@ class Order(models.Model):
             f"#Товары в заказе: \n"
         )
 
-        message_for_user_on_email = (
-            f"Спасибо за оформленный заказ на сайте {settings.DOMAIN_NAME} \n"
-            f"В ближайшее время мы свяжемся с Вами для уточнения данных по заказу и согласования времени доставки.\n\n"
-            f"Данные вашего заказа:\n"
-            f"Имя: {self.first_name} \n"
-            f"Фамилия: {self.last_name} \n"
-            f"Телефон: {self.phone_number} \n"
-            f"Электронная почта: {self.email} \n"
-            f"Адрес доставки: {self.address} \n \n"
-            f"Заказ №{self.id}:\n"
-            f"Общая сумма заказа: {self.basket_history['total_sum']}руб. \n"
-            f"#Товары в заказе: \n"
-        )
-
         for i in range(self.basket_history['order_items'].__len__()):
             message_for_staff_on_email += (
                 f"#{i + 1} "
@@ -99,15 +98,8 @@ class Order(models.Model):
                 f"Всего: {self.basket_history['order_items'][i]['sum']}руб. \n\n"
             )
 
-            message_for_user_on_email += (
-                f"#{i + 1} "
-                f"{self.basket_history['order_items'][i]['product_name']}| "
-                f"Количество: {self.basket_history['order_items'][i]['amount']}шт.| "
-                f"Цена за шт: {self.basket_history['order_items'][i]['price']}руб.| "
-                f"Всего: {self.basket_history['order_items'][i]['sum']}руб. \n\n"
-            )
-
         send_message_about_order_in_telegram(message_for_staff_on_telegram)
+
         # send mail for staff about order:
         send_mail(
             subject=subject,
@@ -116,6 +108,33 @@ class Order(models.Model):
             recipient_list=[settings.EMAIL_STAFF],
             fail_silently=False,
         )
+
+    def send_message_for_user_about_order(self):
+        subject = f"Создан заказ №{self.id}"
+
+        message_for_user_on_email = (
+            f"Спасибо за оформленный заказ на сайте {settings.DOMAIN_NAME} \n"
+            f"В ближайшее время мы свяжемся с Вами для уточнения данных по заказу и согласования времени доставки.\n\n"
+            f"Данные вашего заказа:\n"
+            f"Имя: {self.first_name} \n"
+            f"Фамилия: {self.last_name} \n"
+            f"Телефон: {self.phone_number} \n"
+            f"Электронная почта: {self.email} \n"
+            f"Адрес доставки: {self.address} \n \n"
+            f"Заказ №{self.id}:\n"
+            f"Общая сумма заказа: {self.basket_history['total_sum']}руб. \n"
+            f"#Товары в заказе: \n"
+        )
+
+        for i in range(self.basket_history['order_items'].__len__()):
+            message_for_user_on_email += (
+                f"#{i + 1} "
+                f"{self.basket_history['order_items'][i]['product_name']}| "
+                f"Количество: {self.basket_history['order_items'][i]['amount']}шт.| "
+                f"Цена за шт: {self.basket_history['order_items'][i]['price']}руб.| "
+                f"Всего: {self.basket_history['order_items'][i]['sum']}руб. \n\n"
+            )
+
         # send mail for user about order:
         send_mail(
             subject=subject,
@@ -124,16 +143,3 @@ class Order(models.Model):
             recipient_list=[self.email],
             fail_silently=False,
         )
-
-    def update_after_oder(self, csrftoken=None):
-        if not self.initiator:
-            baskets = BasketFK.objects.filter(csrftoken=csrftoken)
-        else:
-            baskets = BasketAuth.objects.filter(user=self.initiator)
-        self.status = self.CREATED
-        self.basket_history = {
-            'order_items': [basket.de_json() for basket in baskets],
-            'total_sum': float(baskets.total_sum()),
-        }
-        baskets.delete()
-        self.save()

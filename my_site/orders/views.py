@@ -26,7 +26,9 @@ class OrderCreateView(DataMixin, CreateView):
             super().form_valid(form)
             order = Order.objects.get(initiator=self.request.user, status=0)
             order.update_after_oder()
-            order.send_order_mail()
+            order.send_message_for_staff_about_order()
+            if order.initiator.is_verified_email:
+                order.send_message_for_user_about_order()
         else:
             form.instance.csrftoken = self.request.COOKIES['csrftoken']
             form.instance.phone_number = form.cleaned_data['phone_number']
@@ -34,7 +36,7 @@ class OrderCreateView(DataMixin, CreateView):
             csrftoken = self.request.COOKIES['csrftoken']
             order = Order.objects.get(csrftoken=csrftoken, status=0)
             order.update_after_oder(csrftoken=csrftoken)
-            order.send_order_mail()
+            order.send_message_for_staff_about_order()
         return HttpResponseRedirect(reverse_lazy('order_is_create', args=[order.pk]))
 
 
@@ -43,7 +45,7 @@ class OrdersListView(DataMixin, ListView):
     queryset = Order.objects.all()
     ordering = ('-created')
 
-    def get_context_data(self, *, object_list=None, **kwargs):  # FIXMI! Сделать ТitleMixin
+    def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context_def = self.get_user_context(title="Заказы")
         return dict(list(context.items()) + list(context_def.items()))
