@@ -86,5 +86,5 @@ def basket_remove_auth(request, basket_id):
     basket = BasketAuth.objects.get(id=basket_id)
     basket.delete()
     # return render(request, "baskets/modal_basket.html") # тут в response  передается только modal_basket.html
-    return HttpResponseRedirect(
-        request.META['HTTP_REFERER'])  # тут в response  передается весь html и базовый и модальные окна в т.ч.
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])  # тут в response  передается весь html и базовый
+    # и модальные окна в т.ч.

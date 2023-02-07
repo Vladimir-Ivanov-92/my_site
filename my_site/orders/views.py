@@ -11,7 +11,7 @@ from products.utils import DataMixin
 class OrderCreateView(DataMixin, CreateView):
     template_name = 'orders/order_create.html'
     form_class = OrderForm
-    success_url = 'products_home'
+    success_url = 'order_is_create'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -24,13 +24,15 @@ class OrderCreateView(DataMixin, CreateView):
             super().form_valid(form)
             order = Order.objects.get(initiator=self.request.user, status=0)
             order.update_after_oder()
+            order.send_order_mail()
         else:
             form.instance.csrftoken = self.request.COOKIES['csrftoken']
             super().form_valid(form)
             csrftoken = self.request.COOKIES['csrftoken']
             order = Order.objects.get(csrftoken=csrftoken)
             order.update_after_oder(csrftoken=csrftoken)
-        return HttpResponseRedirect(reverse_lazy('products_home'))
+            order.send_order_mail()
+        return HttpResponseRedirect(reverse_lazy('order_is_create', args=[order.pk]))
 
 
 class OrdersListView(DataMixin, ListView):
@@ -38,7 +40,7 @@ class OrdersListView(DataMixin, ListView):
     queryset = Order.objects.all()
     ordering = ('created')
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs):  # FIXMI! Сделать ТitleMixin
         context = super().get_context_data(**kwargs)
         context_def = self.get_user_context(title="Заказы")
         return dict(list(context.items()) + list(context_def.items()))
@@ -54,5 +56,15 @@ class OrderDetailView(DataMixin, DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context_def = self.get_user_context(title=f"Заказ {self.object.id}")
+        context_def = self.get_user_context(title=f"Заказ №{self.object.id}")
+        return dict(list(context.items()) + list(context_def.items()))
+
+
+class OrderIsCreateView(DataMixin, DetailView):
+    template_name = 'orders/order_is_create.html'
+    model = Order
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context_def = self.get_user_context(title=f"Создан заказ №{self.object.id}")
         return dict(list(context.items()) + list(context_def.items()))

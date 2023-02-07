@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.core.mail import send_mail
 from django.db import models
 
 from baskets.models import BasketAuth, BasketFK
@@ -29,6 +31,35 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order #{self.id} {self.first_name} {self.last_name}"
+
+    def send_order_mail(self):
+        subject = f"Создан заказ №{self.id}"
+        message = (
+            f"Покупатель:\n"
+            f"Имя: {self.first_name} \n"
+            f"Фамилия: {self.last_name} \n"
+            f"Электронная почта: {self.email} \n"
+            f"Адрес доставки: {self.address} \n \n"
+            f"Заказ №{self.id}:\n"
+            f"Общая сумма заказа: {self.basket_history['total_sum']}руб. \n"
+        )
+
+        for i in range(self.basket_history['order_items'].__len__()):
+            message += (
+                f"#{i + 1} "
+                f"{self.basket_history['order_items'][i]['product_name']}| "
+                f"Количество: {self.basket_history['order_items'][i]['amount']}шт.| "
+                f"Цена за шт: {self.basket_history['order_items'][i]['price']}руб.| "
+                f"Всего: {self.basket_history['order_items'][i]['sum']}руб. \n"
+            )
+
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=['.....@.....ru'],  # FIXMI!!! Исправить на [self.email] !!!
+            fail_silently=False,
+        )
 
     def update_after_oder(self, csrftoken=None):
         if not self.initiator:
