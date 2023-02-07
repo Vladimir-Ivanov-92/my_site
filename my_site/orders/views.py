@@ -30,7 +30,7 @@ class OrderCreateView(DataMixin, CreateView):
         if self.request.user.is_authenticated:
             form.instance.initiator = self.request.user
             form.instance.phone_number = form.cleaned_data['phone_number']
-            if self.request.user.is_verified_email:
+            if self.request.user.is_verified_email and (form.cleaned_data['email'] == self.request.user.email):
                 super().form_valid(form)
             else:
                 form.add_error('email', ValidationError('Электронная почта не подтверждена'))
