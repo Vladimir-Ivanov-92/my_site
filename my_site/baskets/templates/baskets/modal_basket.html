@@ -6,9 +6,9 @@
         <h5 class="offcanvas-title" id="offcanvasExampleLabel">Корзина </h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-q    <!--  Карточки товаров в корзине-->
+    <!--  Карточки товаров в корзине-->
 
-    c{% if request.user.is_authenticated %}
+    {% if request.user.is_authenticated %}
         {#  Для Авторизированного пользователя:#}
         {% if baskets %}
             <div class="offcanvas-body">
